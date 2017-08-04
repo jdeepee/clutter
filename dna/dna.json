@@ -16,6 +16,56 @@
     },
     "Zomes": [
       {
+        "Name": "holodex",
+        "Description": "Zome dealing with functions relating to node to node communication and selection for index nodes",
+        "RibosomeType": "js",
+        "CodeFile": "holodex.js",
+        "Entries": [
+          {
+              "Name": "VolunteerNode",
+              "DataFormat": "boolean",
+              "Sharing": "public"
+          },
+          {
+          "Name": "Node4ForTest",
+          "DataFormat": "string",
+          "Sharing": "public"
+          }
+        ],
+        "Functions": [
+          {
+            "Name": "selectIndexNode",
+            "CallingType": "string",
+            "Exposure": "public"
+          },
+          {
+            "Name": "indexObject",
+            "CallingType": "json",
+            "Exposure": "public"
+          },
+          {
+            "Name": "searchContent",
+            "CallingType": "string",
+            "Exposure": "public"
+          },
+          {
+            "Name": "bridgeGenesis",
+            "CallingType": "boolean",
+            "Exposure": "public"
+          },
+          {
+            "Name": "createObject1ForTest",
+            "CallingType": "string",
+            "Exposure": "public"
+          },
+          {
+            "Name": "createObject2ForTest",
+            "CallingType": "string",
+            "Exposure": "public"
+          }
+        ]
+      },
+      {
           "Name": "anchor",
           "Description": "Anchor zome",
           "RibosomeType": "js",
@@ -192,27 +242,6 @@
                   "Exposure":"public"
                 }
             ]
-        },
-        {
-          "Name": "holodex",
-          "Description": "zome that implements indexing ",
-          "RibosomeType": "js",
-          "CodeFile": "holodex.js",
-          "Entries": [
-            {
-              "Name" : "NumberOfIndexNodes",
-              "CallingType" : "integer",
-              "Exposure" : "public"
-            },
-            {
-              "Name" : "stringPassedToIndex",
-              "CallingType" : "string",
-              "Exposure" : "public"
-            }
-          ],
-          "Functions":[
-
-          ]
         },
         {
           "Name" : "anchorHashtag",

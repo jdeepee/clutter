@@ -45,6 +45,9 @@ function post(post) {
                                             // which DHT nodes will use to request validation info from my source chain
     commit("post_links",{Links:[{Base:me,Link:post_hash,Tag:"post"}]});
 
+    //var indexedObject = call("holodex","indexObject",{content:post.message,objHash:post_hash});
+    //debug("Indexed object :"+indexedObject);
+
    // TODO detect a hash
     debug(post);
     debug(post.message);
@@ -73,8 +76,21 @@ function post(post) {
     return post_hash;                                  // Returns the hash key of the new post to the calling function
 }
 
+function searchPost(searchString)
+{
+  var postHashes = call("holodex","searchContent",searchString);
+  var posts = [];
 
-function makeFavourite(handle,post)
+  for(var i=0;i<postHashes.length;i++)
+  {
+    var temp= doGetLinkLoad(postHashes[i],"post");
+    posts[i].push(temp);
+  }
+  return posts;
+}
+
+
+/*function makeFavourite(handle,post)
 {
   var hh = makeHash(handle);
   var ph= makeHash(post);
@@ -104,7 +120,7 @@ function postMod(params) {
     var post = params.post;
     // TODO, update the original link too?
     return update("post",post,hash);
-}
+}*/
 
 // TODO add "last 10" or "since timestamp" when query info is supported
 function getPostsBy(userAddresses) {

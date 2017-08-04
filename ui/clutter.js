@@ -57,6 +57,24 @@ function addPost() {
     });
 }
 
+function searchPost() {
+
+    send("searchPost",$('#search').val(),function(arr) {
+        arr = JSON.parse(arr);
+        console.log("posts: " + JSON.stringify(arr));
+
+        var len = len = arr.length;
+        if (len > 0) {
+            for (var i = 0; i < len; i++) {
+                var post = JSON.parse(arr[i].post);
+                post.author = arr[i].author;
+                var id = cachePost(post);
+            }
+        }
+        displayPosts();
+    });
+}
+
 function doEditPost() {
     var now = new(Date);
     var id = $('#postID').val();
