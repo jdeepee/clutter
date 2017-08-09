@@ -23,13 +23,13 @@
         "Entries": [
           {
               "Name": "VolunteerNode",
-              "DataFormat": "boolean",
+              "DataFormat": "string",
               "Sharing": "public"
           },
           {
-          "Name": "Node4ForTest",
-          "DataFormat": "string",
-          "Sharing": "public"
+              "Name": "volunteer_link",
+              "DataFormat": "links",
+              "Sharing": "public"
           }
         ],
         "Functions": [
@@ -45,21 +45,6 @@
           },
           {
             "Name": "searchContent",
-            "CallingType": "string",
-            "Exposure": "public"
-          },
-          {
-            "Name": "bridgeGenesis",
-            "CallingType": "boolean",
-            "Exposure": "public"
-          },
-          {
-            "Name": "createObject1ForTest",
-            "CallingType": "string",
-            "Exposure": "public"
-          },
-          {
-            "Name": "createObject2ForTest",
             "CallingType": "string",
             "Exposure": "public"
           }

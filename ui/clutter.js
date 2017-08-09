@@ -57,7 +57,7 @@ function addPost() {
     });
 }
 
-function searchPost() {
+/*function searchPost() {
 
     send("searchPost",$('#search').val(),function(arr) {
         arr = JSON.parse(arr);
@@ -73,7 +73,7 @@ function searchPost() {
         }
         displayPosts();
     });
-}
+}*/
 
 function doEditPost() {
     var now = new(Date);

@@ -23,8 +23,10 @@ function addAnchor()
   var dna = App.DNA.Hash;
   var anchor_main = {Anchor_Type:"Anchor_Type",Anchor_Text:""};
   var anchor_main_hash=commit("anchor",anchor_main);
-  commit("directory_links", {Links:[{Base:dna,Link:anchor_main_hash,Tag:"Anchor"}]});
+  //debug("Entered addAnchor - main hash - "+anchor_main_hash);
+  commit("anchor_links", {Links:[{Base:dna,Link:anchor_main_hash,Tag:"Anchor"}]});
   var lnk = getLink(dna,"Anchor",{Load : true});
+  //debug("Main anchor hash on link - "+lnk);
   return lnk.Links[0].H;
 }
 
@@ -34,6 +36,7 @@ function anchor_type_create(anchor_type)
   var anchor_main_hash=getMainAchorHash();
   var new_anchorType= {Anchor_Type:anchor_type,Anchor_Text:""};
   var key=commit("anchor",new_anchorType);
+  debug("Anchor type "+anchor_type+" created with hash : "+key);
   commit("anchor_links",{Links:[{Base:anchor_main_hash,Link:key,Tag:"Anchor_Type"}]});
   var anctyplnk= getLink(anchor_main_hash,"Anchor_Type",{Load:true});
   return anctyplnk.Links[0].H;
@@ -41,21 +44,22 @@ function anchor_type_create(anchor_type)
 
 function anchor_create(new_anchor)
 {
-
-  var anchor_type=new_anchor.Anchor_Type;
-  var anchor_text=new_anchor.Anchor_Text;
-  var new_anchor = {Anchor_Type:anchor_type,Anchor_Text:anchor_text};
   var new_anchorHash=commit("anchor",new_anchor);
-  var anchorTypeHash = getAnchorTypeHash(anchor_type);
+  debug("Creating anchor with text : "+new_anchor.Anchor_Text+" and type : "+new_anchor.Anchor_Type);
+  var anchorTypeHash = getAnchorTypeHash(new_anchor.Anchor_Type);
+  debug("Got anchor type hash : "+anchorTypeHash);
+  //var lnk1 = commit("anchor_links",{Links:[{Base:anchorTypeHash,Link:new_anchorHash,Tag:"Anchor_Text"}]});
   anchor_link(anchorTypeHash,new_anchorHash);
-  var lnk = getLink(anchorTypeHash,"Anchor_Text",{Load:true});
-  return lnk.Links[0].H;
+  //var lnk = getLink(anchorTypeHash,"Anchor_Text",{Load:true});
+  var lnk = doGetLinkLoad(anchorTypeHash,"Anchor_Text");
+  debug("Anchor created : ");
+  debug(lnk);
+  return lnk;
 }
 
 function anchor_link(anchor_type,anchor_text)
 {
   commit("anchor_links",{Links:[{Base:anchor_type,Link:anchor_text,Tag:"Anchor_Text"}]});
-
 }
 
 function anchor_update(updateText)
@@ -99,23 +103,42 @@ function anchor_type_list()
   anchor_main_hash=getMainAchorHash();
   var anchor_type=doGetLinkLoad(anchor_main_hash,"Anchor_Type");
 
-  debug("AnchorType:"+anchor_type);
   for(var j=0;j<anchor_type.length;j++)
   {
     var temp = anchor_type[j].Anchor_Type;
     debug(temp);
-    anchor_type_list.push(anchor_type[j].Anchor_Type);
+    var parsed = JSON.parse(temp);
+    debug(parsed.Anchor_Type);
+    anchor_type_list.push(parsed.Anchor_Type);
   }
 
-  return anchor_type_list.toString();
+  return anchor_type_list;
 }
 
+function anchor_list(anchorType)
+{
+
+  anchor_type_hash=getAnchorTypeHash(anchorType);
+  debug("Anchor type hash :"+anchor_type_hash);
+
+
+  var anchorList=doGetLinkLoad(anchor_type_hash,"Anchor_Text");
+
+
+var ser = JSON.stringify(anchorList);
+
+
+  return ser;
+}
 /*****
 *****/
 // helper function to do getLink call, handle the no-link error case, and copy the returned entry values into a nicer array
 function doGetLinkLoad(base, tag) {
     // get the tag from the base in the DHT
+    debug("in doGetLinkLoad :");
     var links = getLink(base, tag,{Load:true});
+    debug("Links : ");
+    debug(links);
     if (isErr(links)) {
         links = [];
     } else {

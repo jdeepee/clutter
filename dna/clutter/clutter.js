@@ -76,7 +76,7 @@ function post(post) {
     return post_hash;                                  // Returns the hash key of the new post to the calling function
 }
 
-function searchPost(searchString)
+/*function searchPost(searchString)
 {
   var postHashes = call("holodex","searchContent",searchString);
   var posts = [];
@@ -87,40 +87,16 @@ function searchPost(searchString)
     posts[i].push(temp);
   }
   return posts;
-}
+}*/
 
 
-/*function makeFavourite(handle,post)
-{
-  var hh = makeHash(handle);
-  var ph= makeHash(post);
-  debug("Adding post to favourite for handle :"+handle);
-  commit("FavouritePost_links",{Links:[{Base:handle,Link:post,Tag:"Favpost"}]});
-
-  getFavouritePosts(hh);
-}
-
-function getFavouritePosts(handleHash)
-{
-
-      var relatedPosts = doGetLinkLoad(handleHash,"Favpost");
-      debug("Favourite posts for handle : "+handleHash+" are : ");
-      for(var j=0;j<relatedPosts.length;j++)
-      {
-        var p = relatedPosts[j];
-        debug(p.Favpost);
-
-      }
-      debug(relatedPosts);
-      return relatedPosts;
-}
 
 function postMod(params) {
     var hash = params.hash;
     var post = params.post;
     // TODO, update the original link too?
     return update("post",post,hash);
-}*/
+}
 
 // TODO add "last 10" or "since timestamp" when query info is supported
 function getPostsBy(userAddresses) {
@@ -296,6 +272,7 @@ function doGetLink(base,tag) {
 function genesis() {                            // 'hc gen chain' calls the genesis function in every zome file for the app
 
     // use the agent string (usually email) used with 'hc init' to identify myself and create a new handle
+    
     addHandle(App.Agent.String);
     //commit("anchor",{type:"sys",value:"directory"});
     return true;
