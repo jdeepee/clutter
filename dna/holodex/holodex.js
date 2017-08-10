@@ -1,37 +1,8 @@
+//Bridge genesis function initializes the volunteer node value. Currently not using argument , hence initializing to default volunteerNode = true
 function bridgeGenesis()
 {
-  debug("Wroking bridgeGenesis");
+  debug("Wroking bridgeGenesis on From side");
   var VolunteerForIndex = "true";
-  debug("Holodex genesis executed ");
-  var VolunteerNode = commit("VolunteerNode",VolunteerForIndex);
-  commit("volunteer_link",{Links:[{Base:App.Key.Hash,Link:VolunteerNode,Tag:"VolunteerNode"}]});
-  debug("VolunteerNode :"+ VolunteerNode);
-  var addSelfAsAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:App.Key.Hash};
-
-  var anchorMain = {Anchor_Type:"Anchor_Type",Anchor_Text:""};
-
-  var amhash = makeHash(anchorMain);
-
-  var checkexist = get(amhash,{GetMask:HC.GetMask.Suorces});
-  debug("Checkexist : "+checkexist.C);
-  if(checkexist.C = JSON.stringify(anchorMain)){
-
-    debug("Creating anchor type IndexNodes");
-    //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
-    call("anchor","anchor_type_create","IndexNodes");
-
-    debug("Adding self to index nodes ... "+App.Key.Hash);
-     var lnk = call("anchor","anchor_create",addSelfAsAnchor);
-
-     var ret = JSON.parse(lnk);
-     debug(ret[0]);
-     return VolunteerNode;
-}
-}
-
-/*function bridgeGenesis(VolunteerForIndex)                     //Volunteering Ratio to be added
-{
-
 
   if(VolunteerForIndex == "true")
   {
@@ -50,29 +21,29 @@ function bridgeGenesis()
     debug("Checkexist : "+checkexist.C);
     if(checkexist.C = JSON.stringify(anchorMain)){
 
-      debug("Creating anchor type IndexNodes");
-      //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
-      call("anchor","anchor_type_create","IndexNodes");
+        debug("Creating anchor type IndexNodes");
+        //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
+        call("anchor","anchor_type_create","IndexNodes");
 
-      debug("Adding self to index nodes ... "+App.Key.Hash);
-       var lnk = call("anchor","anchor_create",addSelfAsAnchor);
-
-    }
-    else {
-      debug("Adding self to index nodes ... "+App.Key.Hash);
+        debug("Adding self to index nodes ... "+App.Key.Hash);
         var lnk = call("anchor","anchor_create",addSelfAsAnchor);
+
+      }
+      else {
+        debug("Adding self to index nodes ... "+App.Key.Hash);
+        var lnk = call("anchor","anchor_create",addSelfAsAnchor);
+      }
+      var ret = JSON.parse(lnk);
+      debug(ret[0]);
+      return true;
     }
-    var ret = JSON.parse(lnk);
-    debug(ret[0]);
-    return VolunteerNode;
-  }
-  else
-  {
-    var VolunteerNode = commit("VolunteerNode",VolunteerForIndex);
-    commit("volunteer_link",{Links:[{Base:App.Key.Hash,Link:VolunteerNode,Tag:"VolunteerNode"}]});
-    return VolunteerNode;
-  }
-}*/
+    else
+    {
+      var VolunteerNode = commit("VolunteerNode",VolunteerForIndex);
+      commit("volunteer_link",{Links:[{Base:App.Key.Hash,Link:VolunteerNode,Tag:"VolunteerNode"}]});
+      return true;
+    }
+}
 
 function selectIndexNode()
 {
@@ -106,7 +77,7 @@ function indexObject(object)
   debug("Selected index node : "+indexNode);
   var objHash = makeHash(object);
   debug("Hash of object : "+objHash);
-  var App_DNA_Hash = "QmeDNBTdDu2TbyTeZiPjJrBryxDZKvCpL2sFa8TEBX598b";
+  var App_DNA_Hash = "QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds";
 
   var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
   if(indexNode == App.Key.Hash)
@@ -125,13 +96,13 @@ function searchContent(StringOfsearchKeywords)
   var indexNode = selectIndexNode();
   debug("Selected index node : "+indexNode);
 
-  var App_DNA_Hash = "QmeDNBTdDu2TbyTeZiPjJrBryxDZKvCpL2sFa8TEBX598b"
+  var App_DNA_Hash = "QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds"
 
   var messageObj = {type:"searchKeywords",searchString:StringOfsearchKeywords};
 
   if(indexNode == App.Key.Hash)
   {
-    var searchResults = bridge(App_DNA_Hash,"searchKeywords","searchKeywords",StringOfsearchKeywords);
+    var searchResults = bridge(App_DNA_Hash,"indexcontent","searchKeywords",StringOfsearchKeywords);
   }
   else {
       var searchResults = send(indexNode,messageObj);
@@ -145,13 +116,13 @@ function receive(input, msg)
   if(msg.type == "createIndex")
   {
     //var retVal = IndexContent(msg.content,msg.hashOfObject,msg.language);
-    var retVal = bridge("QmeDNBTdDu2TbyTeZiPjJrBryxDZKvCpL2sFa8TEBX598b","indexcontent","IndexContent",JSON.stringify(msg));
+    var retVal = bridge("QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds","indexcontent","IndexContent",JSON.stringify(msg));
   }
   else if(msg.type == "searchKeywords")
   {
     debug("Searching for the string :::::: "+msg.searchString);
     //var retVal = searchKeywords(msg.searchString);
-    var retVal = bridge("QmeDNBTdDu2TbyTeZiPjJrBryxDZKvCpL2sFa8TEBX598b","indexcontent","searchKeywords",msg.searchString);
+    var retVal = bridge("QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds","indexcontent","searchKeywords",msg.searchString);
 
   }
   return retVal;
