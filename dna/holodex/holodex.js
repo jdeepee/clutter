@@ -77,7 +77,7 @@ function indexObject(object)
   debug("Selected index node : "+indexNode);
   var objHash = makeHash(object);
   debug("Hash of object : "+objHash);
-  var App_DNA_Hash = "QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds";
+  var App_DNA_Hash = "QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr";
 
   var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
   if(indexNode == App.Key.Hash)
@@ -96,7 +96,7 @@ function searchContent(StringOfsearchKeywords)
   var indexNode = selectIndexNode();
   debug("Selected index node : "+indexNode);
 
-  var App_DNA_Hash = "QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds"
+  var App_DNA_Hash = "QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr"
 
   var messageObj = {type:"searchKeywords",searchString:StringOfsearchKeywords};
 
@@ -116,13 +116,13 @@ function receive(input, msg)
   if(msg.type == "createIndex")
   {
     //var retVal = IndexContent(msg.content,msg.hashOfObject,msg.language);
-    var retVal = bridge("QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds","indexcontent","IndexContent",JSON.stringify(msg));
+    var retVal = bridge("QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr","indexcontent","IndexContent",JSON.stringify(msg));
   }
   else if(msg.type == "searchKeywords")
   {
     debug("Searching for the string :::::: "+msg.searchString);
     //var retVal = searchKeywords(msg.searchString);
-    var retVal = bridge("QmSZwjFtDLS39gmr5tFYCGoSKUNuQht1QMyBbZVeehh5Ds","indexcontent","searchKeywords",msg.searchString);
+    var retVal = bridge("QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr","indexcontent","searchKeywords",msg.searchString);
 
   }
   return retVal;
