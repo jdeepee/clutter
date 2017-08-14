@@ -1,3 +1,6 @@
+function genesis(){
+  return true;
+}
 function detectHashtags(postString)
 {
   debug("STARING");

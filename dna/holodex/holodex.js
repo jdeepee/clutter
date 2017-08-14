@@ -1,3 +1,7 @@
+function genesis()
+{
+  return true;
+}
 //Bridge genesis function initializes the volunteer node value. Currently not using argument , hence initializing to default volunteerNode = true
 function bridgeGenesis()
 {
@@ -11,26 +15,48 @@ function bridgeGenesis()
     var VolunteerNode = commit("VolunteerNode",VolunteerForIndex);
     commit("volunteer_link",{Links:[{Base:App.Key.Hash,Link:VolunteerNode,Tag:"VolunteerNode"}]});
     debug("VolunteerNode :"+ VolunteerNode);
-    var addSelfAsAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:App.Key.Hash};
+    var addSelfAsAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:JSON.stringify(App.Key.Hash)};
 
-    var anchorMain = {Anchor_Type:"Anchor_Type",Anchor_Text:""};
+     anchorMain = {Anchor_Type:"Anchor_Type",Anchor_Text:""};
 
     var amhash = makeHash(anchorMain);
+    debug("Multihash :"+amhash);
 
-    var checkexist = get(amhash,{GetMask:HC.GetMask.Suorces});
-    debug("Checkexist : "+checkexist.C);
-    if(checkexist.C = JSON.stringify(anchorMain)){
+    var checkexist = get(amhash,{GetMask:HC.GetMask.Sources});
+    debug("Checkexist for add anchor : "+checkexist);
+    if(checkexist == JSON.stringify(anchorMain)){
 
+      var IndexNodesAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:""};
+      var inhash = makeHash(JSON.stringify(IndexNodesAnchor));
+      checkexist = get(inhash,{GetMask:HC.GetMask.Sources});
+      debug("Checkexist for index nodes: "+checkexist);
+
+      if(checkexist == JSON.stringify(IndexNodesAnchor) )
+      {
+        debug("Adding self to index nodes ... "+App.Key.Hash);
+        var lnk = call("anchor","anchor_create",addSelfAsAnchor);
+        debug(lnk);
+      }
+      else {
         debug("Creating anchor type IndexNodes");
         //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
         call("anchor","anchor_type_create","IndexNodes");
 
         debug("Adding self to index nodes ... "+App.Key.Hash);
         var lnk = call("anchor","anchor_create",addSelfAsAnchor);
+        debug(lnk);
+        }
 
       }
       else {
+        call("anchor","addAnchor","");
+
+        debug("Creating anchor type IndexNodes");
+        //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
+        call("anchor","anchor_type_create","IndexNodes");
+
         debug("Adding self to index nodes ... "+App.Key.Hash);
+        debug(typeof JSON.stringify(App.Key.Hash));
         var lnk = call("anchor","anchor_create",addSelfAsAnchor);
       }
       var ret = JSON.parse(lnk);
@@ -54,7 +80,7 @@ function selectIndexNode()
 
   if(VolunteerNodeH.Links[0].E == "true")
   {
-    var key = App.Key.Hash;
+    var key =App.Key.Hash;
   }
   else
   {
@@ -77,7 +103,7 @@ function indexObject(object)
   debug("Selected index node : "+indexNode);
   var objHash = makeHash(object);
   debug("Hash of object : "+objHash);
-  var App_DNA_Hash = "QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr";
+  var App_DNA_Hash = "QmYqssjUwkgZ581hs8na6PzW8qpT5R7y9Q9sBdEwimJ86G";
 
   var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
   if(indexNode == App.Key.Hash)
@@ -96,7 +122,7 @@ function searchContent(StringOfsearchKeywords)
   var indexNode = selectIndexNode();
   debug("Selected index node : "+indexNode);
 
-  var App_DNA_Hash = "QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr"
+  var App_DNA_Hash = "QmYqssjUwkgZ581hs8na6PzW8qpT5R7y9Q9sBdEwimJ86G"
 
   var messageObj = {type:"searchKeywords",searchString:StringOfsearchKeywords};
 
@@ -116,13 +142,13 @@ function receive(input, msg)
   if(msg.type == "createIndex")
   {
     //var retVal = IndexContent(msg.content,msg.hashOfObject,msg.language);
-    var retVal = bridge("QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr","indexcontent","IndexContent",JSON.stringify(msg));
+    var retVal = bridge("QmYqssjUwkgZ581hs8na6PzW8qpT5R7y9Q9sBdEwimJ86G","indexcontent","IndexContent",JSON.stringify(msg));
   }
   else if(msg.type == "searchKeywords")
   {
     debug("Searching for the string :::::: "+msg.searchString);
     //var retVal = searchKeywords(msg.searchString);
-    var retVal = bridge("QmTqc6UKqN9SpmpRMx7rmatsBLc4CcVVuZNJ8XbcaP34Sr","indexcontent","searchKeywords",msg.searchString);
+    var retVal = bridge("QmYqssjUwkgZ581hs8na6PzW8qpT5R7y9Q9sBdEwimJ86G","indexcontent","searchKeywords",msg.searchString);
 
   }
   return retVal;
