@@ -35,7 +35,7 @@
       "Zome": "holodex",
       "FnName": "searchContent",
       "Input" : "holodex,We are searching:here,holodex",
-      "Output": "[\"QmNTFhCuQhUQPCverEff4zFr6b54FgLnrnBuGWyGfYaofV\",\"QmYZEj5N2zMuVBATP8cVSHAtF5an8VE4YZVcPsnLATPmbG\"]",
+      "Output": "QmNTFhCuQhUQPCverEff4zFr6b54FgLnrnBuGWyGfYaofV,QmYZEj5N2zMuVBATP8cVSHAtF5an8VE4YZVcPsnLATPmbG",
       "Exposure":"public",
       "Err": "",
       "Regexp": ""

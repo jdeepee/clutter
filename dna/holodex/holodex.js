@@ -105,7 +105,7 @@ function indexObject(object)
   debug("Selected index node : "+indexNode);
   var objHash = makeHash(object);
   debug("Hash of object : "+objHash);
-  var App_DNA_Hash = "QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF";
+  var App_DNA_Hash = "QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4";
 
   var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
   if(indexNode == App.Key.Hash)
@@ -115,6 +115,7 @@ function indexObject(object)
   else {
       var createIndex = send(indexNode,messageObj);
   }
+  debug(createIndex);
   return createIndex;
 }
 
@@ -124,7 +125,7 @@ function searchContent(StringOfsearchKeywords)
   var indexNode = selectIndexNode();
   debug("Selected index node : "+indexNode);
 
-  var App_DNA_Hash = "QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF"
+  var App_DNA_Hash = "QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4"
 
   var messageObj = {type:"searchKeywords",searchString:StringOfsearchKeywords};
 
@@ -135,7 +136,7 @@ function searchContent(StringOfsearchKeywords)
   else {
       var searchResults = send(indexNode,messageObj);
   }
-
+  debug("Returened from holodex"+searchResults);
   return searchResults;
 }
 
@@ -144,13 +145,13 @@ function receive(input, msg)
   if(msg.type == "createIndex")
   {
     //var retVal = IndexContent(msg.content,msg.hashOfObject,msg.language);
-    var retVal = bridge("QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF","indexcontent","IndexContent",msg);
+    var retVal = bridge("QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4","indexcontent","IndexContent",msg);
   }
   else if(msg.type == "searchKeywords")
   {
     debug("Searching for the string :::::: "+msg.searchString);
     //var retVal = searchKeywords(msg.searchString);
-    var retVal = bridge("QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF","indexcontent","searchKeywords",msg.searchString);
+    var retVal = bridge("QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4","indexcontent","searchKeywords",msg.searchString);
 
   }
   return retVal;
