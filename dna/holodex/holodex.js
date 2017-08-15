@@ -110,7 +110,7 @@ function indexObject(object)
   var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
   if(indexNode == App.Key.Hash)
   {
-    var createIndex = bridge(App_DNA_Hash,"indexcontent","IndexContent",JSON.stringify(messageObj));
+    var createIndex = bridge(App_DNA_Hash,"indexcontent","IndexContent",messageObj);
   }
   else {
       var createIndex = send(indexNode,messageObj);
@@ -144,7 +144,7 @@ function receive(input, msg)
   if(msg.type == "createIndex")
   {
     //var retVal = IndexContent(msg.content,msg.hashOfObject,msg.language);
-    var retVal = bridge("QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF","indexcontent","IndexContent",JSON.stringify(msg));
+    var retVal = bridge("QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF","indexcontent","IndexContent",msg);
   }
   else if(msg.type == "searchKeywords")
   {
