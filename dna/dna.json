@@ -20,7 +20,7 @@
         "Description": "Zome dealing with functions relating to node to node communication and selection for index nodes",
         "RibosomeType": "js",
         "CodeFile": "holodex.js",
-        "BridgeTo":"QmYqssjUwkgZ581hs8na6PzW8qpT5R7y9Q9sBdEwimJ86G",
+        "BridgeTo":"QmbSBCyPxcAqFmMhVRWNzVPZyCAqExV86MMVUSbWxWfTxF",
         "Entries": [
           {
               "Name": "VolunteerNode",
