@@ -15,7 +15,7 @@ function bridgeGenesis()
     var VolunteerNode = commit("VolunteerNode",VolunteerForIndex);
     commit("volunteer_link",{Links:[{Base:App.Key.Hash,Link:VolunteerNode,Tag:"VolunteerNode"}]});
     debug("VolunteerNode :"+ VolunteerNode);
-    var addSelfAsAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:JSON.stringify(App.Key.Hash)};
+    var addSelfAsAnchor = {Anchor_Type:"IndexNodes",Anchor_Text:App.Key.Hash};
 
      anchorMain = {Anchor_Type:"Anchor_Type",Anchor_Text:""};
 
@@ -53,11 +53,13 @@ function bridgeGenesis()
 
         debug("Creating anchor type IndexNodes");
         //var IndexNodeAnchorType = {Anchor_Type:"IndexNodes",Anchor_Text:""};
-        call("anchor","anchor_type_create","IndexNodes");
+        var at = call("anchor","anchor_type_create","IndexNodes");
+        //debug("Anchor type indexNodes : "+at);
 
         debug("Adding self to index nodes ... "+App.Key.Hash);
-        debug(typeof JSON.stringify(App.Key.Hash));
+        //debug(typeof JSON.stringify(App.Key.Hash));
         var lnk = call("anchor","anchor_create",addSelfAsAnchor);
+        //debug(lnk);
       }
       var ret = JSON.parse(lnk);
       debug(ret[0]);

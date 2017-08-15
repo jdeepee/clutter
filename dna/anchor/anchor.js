@@ -44,8 +44,10 @@ function anchor_type_create(anchor_type)
 
 function anchor_create(new_anchor)
 {
-  var new_anchorHash=commit("anchor",new_anchor);
+  debug("in anchor create");
   debug("Creating anchor with text : "+new_anchor.Anchor_Text+" and type : "+new_anchor.Anchor_Type);
+  var new_anchorHash=commit("anchor",new_anchor);
+
   var anchorTypeHash = getAnchorTypeHash(new_anchor.Anchor_Type);
   debug("Got anchor type hash : "+anchorTypeHash);
   //var lnk1 = commit("anchor_links",{Links:[{Base:anchorTypeHash,Link:new_anchorHash,Tag:"Anchor_Text"}]});
