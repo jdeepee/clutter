@@ -5,7 +5,7 @@
       "Zome": "holodex",
       "FnName": "selectIndexNode",
       "Input" : "",
-      "Output": "QmcPA2FNX93upt1YZhUH8eC1JWjvrKqFrty8P43ifRJ5tR",
+      "Output": "%key%",
       "Exposure":"public",
       "Err": "",
       "Regexp": ""
@@ -13,7 +13,7 @@
   {
       "Convey":"Checking send receive for indexing function .",
       "Zome": "holodex",
-      "FnName": "indexObject",
+      "FnName": "indexObjectForTest",
       "Input" : {"content":"holodex : We are Indexing this content using holodex app. this","details":"can include timestamp, etc."},
       "Output": "\"\\\"QmYZEj5N2zMuVBATP8cVSHAtF5an8VE4YZVcPsnLATPmbG\\\"\"",
       "Exposure":"public",
@@ -23,7 +23,7 @@
   {
       "Convey":"Checking send receive for indexing function .",
       "Zome": "holodex",
-      "FnName": "indexObject",
+      "FnName": "indexObjectForTest",
       "Input" : {"content":"holodex can also be used for searching keywords","details":"can include timestamp,lication, etc."},
       "Output": "\"\\\"QmNTFhCuQhUQPCverEff4zFr6b54FgLnrnBuGWyGfYaofV\\\"\"",
       "Exposure":"public",

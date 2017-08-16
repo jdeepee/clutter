@@ -45,6 +45,11 @@
             "Exposure": "public"
           },
           {
+            "Name": "indexObjectForTest",
+            "CallingType": "json",
+            "Exposure": "public"
+          },
+          {
             "Name": "searchContent",
             "CallingType": "string",
             "Exposure": "public"
@@ -219,14 +224,9 @@
 
 
                 {
-                  "Name":"makeFavourite",
-                  "CallingType":"json",
-                  "Exposure":"public"
-                },
-                {
-                  "Name":"getFavouritePosts",
-                  "CallingType":"json",
-                  "Exposure":"public"
+                    "Name": "searchPost",
+                    "CallingType": "string",
+                    "Exposure":"public"
                 }
             ]
         },

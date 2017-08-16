@@ -57,23 +57,55 @@ function addPost() {
     });
 }
 
-/*function searchPost() {
+function searchPost() {
 
-    send("searchPost",$('#search').val(),function(arr) {
-        arr = JSON.parse(arr);
-        console.log("posts: " + JSON.stringify(arr));
+  $.post("fn/clutter/searchPost",$('#sp').val(),function(arr) {
 
-        var len = len = arr.length;
-        if (len > 0) {
-            for (var i = 0; i < len; i++) {
-                var post = JSON.parse(arr[i].post);
-                post.author = arr[i].author;
-                var id = cachePost(post);
-            }
-        }
-        displayPosts();
+        displaySearchedPosts(arr);
     });
-}*/
+}
+
+function displaySearchedPosts(arrString) {
+
+  arr = arrString.split('},{');
+
+  for(m=0;m<arr.length;m++)
+  {
+    if(m==0)
+    {
+      arr[m] = arr[m]+"}";
+    }
+    else if(m==arr.length-1)
+    {
+      arr[m]="{"+arr[m];
+    }
+    else {
+      arr[m]="{"+arr[m]+"}"
+    }
+  }
+
+  $("#search").empty();
+    $("#search").html("");
+    for (i = 0; i < arr.length; i++) {
+        var post = JSON.parse(arr[i]);
+
+        $("#searchP").append(makeSearchPostHTML(post));
+    }
+
+}
+
+function makeSearchPostHTML(post) {
+
+    var d = new Date(post.stamp);
+
+    return '<div class="meow"><div class="stamp">'+d+'</div><div class="message">'+post.message+'</div></div>';
+}
+
+function updateSearchDiv()
+{
+  $("#searchP").load("index.htlm");
+  return false;
+}
 
 function doEditPost() {
     var now = new(Date);

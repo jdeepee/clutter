@@ -45,7 +45,7 @@ function post(post) {
                                             // which DHT nodes will use to request validation info from my source chain
     commit("post_links",{Links:[{Base:me,Link:post_hash,Tag:"post"}]});
 
-    //var indexedObject = call("holodex","indexObject",{content:post.message,objHash:post_hash});
+    call("holodex","indexObject",{content:post.message,objHash:post_hash});
     //debug("Indexed object :"+indexedObject);
 
    // TODO detect a hash
@@ -76,18 +76,27 @@ function post(post) {
     return post_hash;                                  // Returns the hash key of the new post to the calling function
 }
 
-/*function searchPost(searchString)
+function searchPost(searchString)
 {
+  debug("Calling holodex for search ");
   var postHashes = call("holodex","searchContent",searchString);
-  var posts = [];
-
-  for(var i=0;i<postHashes.length;i++)
+  debug("call to search function successful : Type : "+typeof postHashes);
+  var postHashArr = postHashes.split(',');;
+  var posts = new Array(postHashArr.length);
+  debug("Array of hash of object : "+postHashArr);
+  for(var i=0;i<postHashArr.length;i++)
   {
-    var temp= doGetLinkLoad(postHashes[i],"post");
-    posts[i].push(temp);
+    debug("Inside for :"+postHashArr[i]);
+    var temp= get(postHashArr[i],{GetMask:HC.GetMask.Entry});
+    debug("printing out temp : "+JSON.parse(temp).message+" stamp  :"+JSON.parse(temp).stamp);
+    //posts[i] =JSON.parse(temp).message;
+    //posts[i].stamp=JSON.parse(temp).stamp;
+    posts[i]= temp;
+
   }
+
   return posts;
-}*/
+}
 
 
 

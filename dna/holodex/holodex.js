@@ -103,6 +103,29 @@ function indexObject(object)
 {
   var indexNode = selectIndexNode();
   debug("Selected index node : "+indexNode);
+  var objHash = object.objHash;
+  //For tests
+  //var objHash = makeHash(object);
+  debug("Hash of object : "+objHash);
+  var App_DNA_Hash = "QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4";
+
+  var messageObj = {type:"createIndex",content:object.content,hashOfObject:objHash,language:"English"};
+  if(indexNode == App.Key.Hash)
+  {
+    var createIndex = bridge(App_DNA_Hash,"indexcontent","IndexContent",messageObj);
+  }
+  else {
+      var createIndex = send(indexNode,messageObj);
+  }
+  debug(createIndex);
+  return createIndex;
+}
+
+function indexObjectForTest(object) //This function was created as make hash cannot be done in test
+{
+  var indexNode = selectIndexNode();
+  debug("Selected index node : "+indexNode);
+
   var objHash = makeHash(object);
   debug("Hash of object : "+objHash);
   var App_DNA_Hash = "QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4";
