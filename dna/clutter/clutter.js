@@ -103,6 +103,7 @@ function searchPost(searchString)
 function postMod(params) {
     var hash = params.hash;
     var post = params.post;
+
     // TODO, update the original link too?
     return update("post",post,hash);
 }

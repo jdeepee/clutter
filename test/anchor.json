@@ -44,7 +44,7 @@
     "Zome": "anchor",
     "FnName": "anchor_update",
     "Input" : {"anchor_type":"hashtag","old_anchorText":"Rasika","new_anchorText":"UpdatedTextRasika"},
-    "Output": "\"%h1%\"",
+    "Output": "\"QmXrefzzpmztC2uhCsLxnLe1wxPMa6LYne7tyFgwp7qZ8w\"",
     "Exposure":"public",
     "Err": "",
     "Regexp": ""
@@ -54,7 +54,7 @@
     "Zome": "anchor",
     "FnName": "anchor_type_list",
     "Input" : "",
-    "Output": "{\"Anchor_Text\":\"\",\"Anchor_Type\":\"room\"},{\"Anchor_Text\":\"\",\"Anchor_Type\":\"hashtag\"}",
+    "Output": "room,IndexNodes,hashtag",
     "Exposure":"public",
     "Err": "",
     "Regexp": ""

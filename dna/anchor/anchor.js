@@ -39,7 +39,23 @@ function anchor_type_create(anchor_type)
   debug("Anchor type "+anchor_type+" created with hash : "+key);
   commit("anchor_links",{Links:[{Base:anchor_main_hash,Link:key,Tag:"Anchor_Type"}]});
   var anctyplnk= getLink(anchor_main_hash,"Anchor_Type",{Load:true});
-  return anctyplnk.Links[0].H;
+
+  var compareE = "{\"Anchor_Text\":\"\",\"Anchor_Type\":\""+anchor_type+"\"}";
+
+  debug("Printing compareE : "+compareE);
+  for(var n=0;n<anctyplnk.Links.length;n++)
+  {
+    debug("Current E : ");
+    debug(anctyplnk.Links[n].E);
+
+    if(anctyplnk.Links[n].E == compareE)
+    {
+
+      var retObj = anctyplnk.Links[n];
+      break;
+    }
+  }
+  return retObj.H;
 }
 
 function anchor_create(new_anchor)
@@ -56,7 +72,7 @@ function anchor_create(new_anchor)
   var lnk = doGetLinkLoad(anchorTypeHash,"Anchor_Text");
   debug("Anchor created : ");
   debug(lnk);
-  return lnk;
+  return lnk[0].H;
 }
 
 function anchor_link(anchor_type,anchor_text)
@@ -86,7 +102,7 @@ function anchor_update(updateText)
   anchor_updatelink(anchorTypeHash,oldAnchorHash,newAnchorHash);
 
   var updcheck = getLink(anchorTypeHash,"Anchor_Text",{Load:true});
-  return updcheck;
+  return updcheck.Links[0].H;
 }
 
 function anchor_updatelink(anchorTypeHash,oldAnchorHash,newAnchorHash)
