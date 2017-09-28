@@ -1,13 +1,13 @@
 {
-    "title": "Post Schema",
-    "type": "object",
-    "properties": {
-	"message": {
-	    "type": "string"
+	"title": "Post Schema",
+	"type": "object",
+	"properties": {
+		"message": {
+			"type": "string"
+		},
+		"stamp": {
+			"type": "integer"
+		}
 	},
-	"stamp": {
-	    "type": "integer"
-	}
-    },
-    "required": ["message","stamp"]
+	"required": ["message","stamp"]
 }

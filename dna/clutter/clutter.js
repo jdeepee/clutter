@@ -2,34 +2,36 @@
 // EXPOSED Functions: visible to the UI, can be called via localhost, web browser, or socket
 // ===============================================================================
 
-function getProperty(name) {            // The definition of the function you intend to expose
-    return property(name);              // Retrieves a property of the holochain from the DNA (e.g., Name, Language
+// Retrieves a property of the holochain from the DNA (e.g., Name, Language)
+function getProperty(name)
+{
+    return property(name);
 }
 
+function appProperty(name)
+{
+    if (name == "App_Agent_Hash")    { return App.Agent.Hash; }
+    if (name == "App_Agent_String")  { return App.Agent.String; }
+    if (name == "App_Key_Hash")      { return App.Key.Hash; }
+    if (name == "App_DNA_Hash")      { return App.DNA.Hash; }
 
-function appProperty(name) {            // The definition of the function you intend to expose
-    if (name == "App_Agent_Hash") {return App.Agent.Hash;}
-    if (name == "App_Agent_String")  {return App.Agent.String;}
-    if (name == "App_Key_Hash")   {return   App.Key.Hash;}
-    if (name == "App_DNA_Hash")   {return   App.DNA.Hash;}
-    return "Error: No App Property with name: " + name;
+    throw "Error: No App Property with name: " + name;
 }
 
-function follow(userAddress) {
-  // Expects a userAddress hash of the person you want to follow
+// Expects a userAddress hash of the person you want to follow
+function follow(userAddress)
+{
     var me = getMe();                  // Looks up my hash address and assign it to 'me'
 
-       // Commits a new follow entry to my source chain
-       // On the DHT, puts a link on their hash to my hash as a "follower"
-       // On the DHT, puts a link on my hash to their hash as a "following"
-    return commit("follow",
-                  {Links:[
-                      {Base:userAddress,Link:me,Tag:"follower"},
-                      {Base:me,Link:userAddress,Tag:"following"}
-                  ]});
+    return commit("follow", // Commit a new follow entry to my source chain
+        { Links:[
+            { Base:userAddress, Link:me, Tag:"follower" }, // On the DHT, puts a link on their hash to my hash as a "follower"
+            { Base:me, Link:userAddress, Tag:"following" } // On the DHT, puts a link on my hash to their hash as a "following"
+        ]});
 }
 
-function unfollow(userAddress){
+function unfollow(userAddress)
+{
     var me = getMe();
     return commit("unfollow",  // On my source chain, commits the unfollow entry
                   {Links:[
@@ -38,73 +40,47 @@ function unfollow(userAddress){
                   ]});
 }
 
-
-function post(post) {
+function post(post)
+{
     var post_hash = commit("post",post);        // Commits the post block to my source chain, assigns resulting hash to 'key'
     var me = getMe();                       // Looks up my hash address and assign it to 'me'
                                             // which DHT nodes will use to request validation info from my source chain
-    commit("post_links",{Links:[{Base:me,Link:post_hash,Tag:"post"}]});
+    commit("post_links", { Links: [{ Base:me, Link:post_hash, Tag:"post" }] });
 
     call("holodex","indexObject",{content:post.message,objHash:post_hash});
-    //debug("Indexed object :"+indexedObject);
 
-   // TODO detect a hash
-    debug(post);
-    debug(post.message);
-    debug("Starting HASHtag search");
-    var hashTag_List= call ("anchorHashtag","detectHashtags",post.message);
-    //$.post("/fn/anchorHashtag/detectHashtags",post.message,function(somevar){});
-
+    var hashTag_List = call("anchorHashtag", "detectHashtags", post.message);
 
     if (hashTag_List != null)
     {
-      debug(hashTag_List);
-      debug("Hashtag/s found in post");
-	     for(var i in hashTag_List)
-	      {
-		         var ht = hashTag_List[i];
-             call ("anchorHashtag","LinkorCreateHT",ht,post_hash);
+        for(var i in hashTag_List)
+        {
+            var ht = hashTag_List[i];
+            call ("anchorHashtag","LinkorCreateHT",ht,post_hash);
       	}
-      }
-      else
-      {
-        debug("No Hashtags in post");
-      }
+    }
 
-   debug("meta: "+JSON.stringify(getLink(me,"post",{Load:true})));
-    debug(post_hash);
-    return post_hash;                                  // Returns the hash key of the new post to the calling function
+    return post_hash; // Returns the hash key of the new post to the calling function
 }
 
 function searchPost(searchString)
 {
-  debug("Calling holodex for search ");
-  var postHashes = call("holodex","searchContent",searchString);
-  debug("call to search function successful : Type : "+typeof postHashes);
-  var postHashArr = postHashes.split(',');;
-  var posts = new Array(postHashArr.length);
-  debug("Array of hash of object : "+postHashArr);
-  for(var i=0;i<postHashArr.length;i++)
-  {
-    debug("Inside for :"+postHashArr[i]);
-    var temp= get(postHashArr[i],{GetMask:HC.GetMask.Entry});
-    debug("printing out temp : "+JSON.parse(temp).message+" stamp  :"+JSON.parse(temp).stamp);
-    //posts[i] =JSON.parse(temp).message;
-    //posts[i].stamp=JSON.parse(temp).stamp;
-    posts[i]= temp;
+    var postHashes = call("holodex","searchContent",searchString);
+    var postHashArr = postHashes.split(',');;
+    var posts = new Array(postHashArr.length);
 
-  }
+    for(var i=0; i < postHashArr.length; i++)
+    {
+        posts[i] = get(postHashArr[i],{GetMask:HC.GetMask.Entry});
+    }
 
-  return posts;
+    return posts;
 }
-
-
 
 function postMod(params) {
     var hash = params.hash;
     var post = params.post;
 
-    // TODO, update the original link too?
     return update("post",post,hash);
 }
 
@@ -115,10 +91,12 @@ function getPostsBy(userAddresses) {
     for (var i=0;i<userAddresses.length;i++) {
         var author = userAddresses[i];
         var authorPosts = doGetLinkLoad(author,"post");
+        
         // add in the author
         for(var j=0;j<authorPosts.length;j++) {
-            var post = authorPosts[j];
+            var post = JSON.parse(authorPosts[j].post);
             post.author = author;
+            post.hash = authorPosts[j].H;
             posts.push(post);
         }
     }
@@ -128,27 +106,30 @@ function getPostsBy(userAddresses) {
 // get a list of all the people from the DHT a user is following or follows
 function getFollow(params) {
     var type = params.type;
-    var  base = params.from;
+    var base = params.from;
     var result = {};
+
     if ((type == "follows") || (type == "following")) {
         result["result"] = doGetLink(base,type);
     }
     else {
         result["error"] = "bad type: "+type;
     }
+
     return result;
 }
 
-function newHandle(handle){
+function newHandle(handle)
+{
     var me = getMe();
     var directory = getDirectory();
     var handles = doGetLink(me,"handle");
     var n = handles.length - 1;
+
     if (n >= 0) {
         var oldKey = handles[n];
         var key = update("handle",handle,oldKey);
 
-        debug(handle+" is "+key);
         commit("handle_links",
                {Links:[
                    {Base:me,Link:oldKey,Tag:"handle",LinkAction:HC.LinkAction.Del},
@@ -223,8 +204,6 @@ function addHandle(handle) {
     var me = getMe();
     var directory = getDirectory();
 
-    debug(handle+" is "+key);
-
     commit("handle_links", {Links:[{Base:me,Link:key,Tag:"handle"}]});
     commit("directory_links", {Links:[{Base:directory,Link:key,Tag:"handle"}]});
 
@@ -237,39 +216,46 @@ function isErr(result) {
 }
 
 // helper function to do getLink call, handle the no-link error case, and copy the returned entry values into a nicer array
-function doGetLinkLoad(base, tag) {
+function doGetLinkLoad(base, tag)
+{
     // get the tag from the base in the DHT
     var links = getLink(base, tag,{Load:true});
+    
     if (isErr(links)) {
         links = [];
     } else {
         links = links.Links;
     }
+    
     var links_filled = [];
+
     for (var i=0;i <links.length;i++) {
         var link = {H:links[i].H};
         link[tag] = links[i].E;
         links_filled.push(link);
     }
-    debug("Links Filled:"+JSON.stringify(links_filled));
+
     return links_filled;
 }
 
 // helper function to call getLinks, handle the no links entry error, and build a simpler links array.
-function doGetLink(base,tag) {
+function doGetLink(base,tag)
+{
     // get the tag from the base in the DHT
     var links = getLink(base, tag,{Load:true});
+
     if (isErr(links)) {
         links = [];
     }
      else {
         links = links.Links;
     }
-    debug("Links:"+JSON.stringify(links));
+
     var links_filled = [];
     for (var i=0;i <links.length;i++) {
         links_filled.push(links[i].H);
     }
+
     return links_filled;
 }
 
@@ -279,12 +265,10 @@ function doGetLink(base,tag) {
 
 // GENESIS - Called only when your source chain is generated:'hc gen chain <name>'
 // ===============================================================================
-function genesis() {                            // 'hc gen chain' calls the genesis function in every zome file for the app
-
+function genesis()
+{                            // 'hc gen chain' calls the genesis function in every zome file for the app
     // use the agent string (usually email) used with 'hc init' to identify myself and create a new handle
-    debug("Clutter genesis ");
     addHandle(App.Agent.String);
-    //commit("anchor",{type:"sys",value:"directory"});
     return true;
 }
 
@@ -295,27 +279,29 @@ function genesis() {                            // 'hc gen chain' calls the gene
 // ===============================================================================
 
 function validateCommit(entry_type,entry,header,pkg,sources) {
-    debug("validate commit: "+entry_type);
     return validate(entry_type,entry,header,sources);
 }
 
 function validatePut(entry_type,entry,header,pkg,sources) {
-    debug("validate put: "+entry_type);
     return validate(entry_type,entry,header,sources);
 }
 
-function validate(entry_type,entry,header,sources) {
+function validate(entry_type,entry,header,sources)
+{
     if (entry_type=="post") {
         var l = entry.message.length;
-        if (l>0 && l<256) {return true;}
+        if (l > 0 && l < 256) { return true; }
         return false;
     }
+
     if (entry_type=="handle") {
         return true;
     }
+
     if (entry_type=="follow") {
         return true;
     }
+
     return true;
 }
 
@@ -323,8 +309,8 @@ function validate(entry_type,entry,header,sources) {
 // Examples:
 //   - Only Bob should be able to make Bob a "follower" of Alice
 //   - Only Bob should be able to list Alice in his people he is "following"
-function validateLink(linkEntryType,baseHash,links,pkg,sources){
-    debug("validate link: "+linkEntryType);
+function validateLink(linkEntryType,baseHash,links,pkg,sources)
+{
     if (linkEntryType=="handle_links") {
         var length = links.length;
         // a valid handle is when:
@@ -354,15 +340,21 @@ function validateLink(linkEntryType,baseHash,links,pkg,sources){
     }
     return true;
 }
-function validateMod(entry_type,entry,header,replaces,pkg,sources) {
-    debug("validate mod: "+entry_type+" header:"+JSON.stringify(header)+" replaces:"+JSON.stringify(replaces));
-    if (entry_type == "handle") {
+function validateMod(entry_type,entry,header,replaces,pkg,sources)
+{
+    if (entry_type == "handle")
+    {
         // check that the source is the same as the creator
         // TODO we could also check that the previous link in the type-chain is the replaces hash.
         var orig_sources = get(replaces,{GetMask:HC.GetMask.Sources});
-        if (isErr(orig_sources) || orig_sources == undefined || orig_sources.length !=1 || orig_sources[0] != sources[0]) {return false;}
+        
+        if (isErr(orig_sources) || orig_sources == undefined || orig_sources.length !=1 || orig_sources[0] != sources[0]) {
+            return false;
+        }
 
-    } else if (entry_type == "post") {
+    }
+    else if (entry_type == "post")
+    {
         // there must actually be a message
         if (entry.message == "") return false;
         var orig = get(replaces,{GetMask:HC.GetMask.Sources+HC.GetMask.Entry});
@@ -374,10 +366,12 @@ function validateMod(entry_type,entry,header,replaces,pkg,sources) {
         // message must actually be different
         return orig_message != entry.message;
     }
+    
     return true;
 }
-function validateDel(entry_type,hash,pkg,sources) {
-    debug("validate del: "+entry_type);
+
+function validateDel(entry_type,hash,pkg,sources)
+{
     return true;
 }
 

@@ -20,19 +20,29 @@ function getMyHandle(callbackFn) {
 }
 
 function getFollow(who,type,callbackFn) {
+
     send("getFollow",JSON.stringify({from:who,type:type}),function(data) {
+        
         var j =  JSON.parse(data);
         var following = j.result;
-        if (following != undefined) {
+        
+        if (following != undefined)
+        {
+            
             var len = following.length;
+            
             for (var i = 0; i < len; i++) {
                 cacheFollow(following[i]);
             }
+
             if (callbackFn!=undefined) {
                 callbackFn();
             }
+
         }
+
     });
+
 }
 
 function getProfile() {
@@ -45,10 +55,12 @@ function getProfile() {
 
 function addPost() {
     var now = new(Date);
+
     var post = {
         message:$('#meow').val(),
         stamp: now.valueOf()
     };
+
     send("post",JSON.stringify(post),function(data) {
         post.key = JSON.parse(data); // save the key of our post to the post
         post.author = App.me;
@@ -58,63 +70,56 @@ function addPost() {
 }
 
 function searchPost() {
-
-  $.post("fn/clutter/searchPost",$('#sp').val(),function(arr) {
-
+    $.post("fn/clutter/searchPost",$('#sp').val(),function(arr) {
         displaySearchedPosts(arr);
     });
 }
 
-function displaySearchedPosts(arrString) {
+function displaySearchedPosts(arrString)
+{
 
-  arr = arrString.split('},{');
+    arr = arrString.split('},{');
 
-  for(m=0;m<arr.length;m++)
-  {
-    if(m==0)
+    // fix each splitted string to put appropriate brackets back in
+    for(m=0;m<arr.length;m++)
     {
-      arr[m] = arr[m]+"}";
+        if (m==0) { arr[m] = arr[m]+"}"; } // first one - needs only closer re-added
+        else if(m==arr.length-1) { arr[m]="{"+arr[m]; } // last one - needs only opener re-added
+        else { arr[m]="{"+arr[m]+"}" } // all the rest - need both re-added
     }
-    else if(m==arr.length-1)
-    {
-      arr[m]="{"+arr[m];
-    }
-    else {
-      arr[m]="{"+arr[m]+"}"
-    }
-  }
 
-  $("#search").empty();
+    $("#search").empty();
     $("#search").html("");
     for (i = 0; i < arr.length; i++) {
         var post = JSON.parse(arr[i]);
-
         $("#searchP").append(makeSearchPostHTML(post));
     }
 
 }
 
 function makeSearchPostHTML(post) {
-
     var d = new Date(post.stamp);
-
     return '<div class="meow"><div class="stamp">'+d+'</div><div class="message">'+post.message+'</div></div>';
 }
 
 function updateSearchDiv()
 {
-  $("#searchP").load("index.htlm");
-  return false;
+    $("#searchP").load("index.html");
+    return false;
 }
 
-function doEditPost() {
+function doEditPost()
+{
     var now = new(Date);
     var id = $('#postID').val();
+
     var post = {
         message:$('#editedMessage').val(),
         stamp: now.valueOf()
     };
+
     $('#editPostDialog').modal('hide');
+    
     send("postMod",JSON.stringify({hash:App.posts[id].key,post:post}),function(data) {
         post.key = JSON.parse(data); // save the key of our post to the post
         post.author = App.me;
@@ -124,13 +129,15 @@ function doEditPost() {
     });
 }
 
-function follow(w) {
+function follow(w)
+{
     send("follow",w,function(data) {
         cacheFollow(w);
     });
 }
 
-function getUserHandle(user) {
+function getUserHandle(user)
+{
     var author = App.handles[user];
     var handle;
     if (author == undefined) {
@@ -144,7 +151,7 @@ function getUserHandle(user) {
 function makePostHTML(id,post) {
     var d = new Date(post.stamp);
     var handle = getUserHandle(post.author);
-    return '<div class="meow" id="'+id+'"><a class="meow-edit" href="#" onclick="openEditPost('+id+')">edit</a><div class="stamp">'+d+'</div><a href="#" class="user" onclick="showUser(\''+post.author+'\');">'+handle+'</a><div class="message">'+post.message+'</div></div>';
+    return '<div class="meow" id="'+id+'"><a class="meow-edit" href="#" onclick="openEditPost('+id+'); return false;">edit</a><div class="stamp">'+d+'</div><a href="#" class="user" onclick="showUser(\''+post.author+'\'); return false;">'+handle+'</a><div class="message">'+post.message+'</div></div>';
 }
 
 function makeUserHTML(user) {
@@ -182,11 +189,10 @@ function getPosts(by) {
         arr = JSON.parse(arr);
         console.log("posts: " + JSON.stringify(arr));
 
-        var len = len = arr.length;
+        var len = arr.length;
         if (len > 0) {
             for (var i = 0; i < len; i++) {
-                var post = JSON.parse(arr[i].post);
-                post.author = arr[i].author;
+                var post = arr[i];
                 var id = cachePost(post);
             }
         }
@@ -362,7 +368,7 @@ function showFeed() {
 $(window).ready(function() {
     $("#submitFollow").click(doFollow);
     $('#followButton').click(openFollow);
-    $("#handle").on("click", "", openSetHandle);
+    $("#handle").click("click", openSetHandle);
     $('#setHandleButton').click(doSetHandle);
     $('#search-results.closer').click(hideSearchResults);
     $('#user-header').click(showFeed);

@@ -20,7 +20,7 @@
         "Description": "Zome dealing with functions relating to node to node communication and selection for index nodes",
         "RibosomeType": "js",
         "CodeFile": "holodex.js",
-        "BridgeTo":"QmQjgvQQik1RhBEg1zpDY1PKRsdgm1YQhbZ7Ebj2drY7f4",
+        "BridgeTo":"holodex",
         "Entries": [
           {
               "Name": "VolunteerNode",
@@ -63,45 +63,48 @@
           "RibosomeType": "js",
           "CodeFile": "anchor.js",
           "Entries": [
-              {
-                  "Name": "anchor",
-                  "DataFormat": "json",
-                  "Sharing": "public"
-              },
-              {
-                  "Name": "anchor_links",
-                  "DataFormat": "links",
-                  "Sharing": "public"
-              }
+            {
+                "Name": "anchor_base",
+                "DataFormat": "string",
+                "Sharing": "public"
+            },
+            {
+                "Name": "anchor_link",
+                "DataFormat": "links",
+                "Sharing": "public"
+            },
+            {
+                "Name": "_anchor_generic_",
+                "DataFormat": "string",
+                "Sharing": "public"
+            },
+            {
+                "Name": "_anchor_json_type_for_testing_",
+                "DataFormat": "json",
+                "Sharing": "public"
+            }
           ],
           "Functions": [
-              {
-                  "Name": "anchor_type_create",
-                  "CallingType": "string",
-                  "Exposure":"public"
-              },
-              {
-                "Name": "addAnchor",
-                "CallingType": "string",
-                "Exposure":"public"
-              },
-              {
-                "Name": "anchor_create",
+            {
+                "Name": "set",
                 "CallingType": "json",
                 "Exposure":"public"
-              },
-              {
-                "Name": "anchor_update",
+            },
+            {
+                "Name": "get",
                 "CallingType": "json",
                 "Exposure":"public"
-              },
-              {
-                "Name": "anchor_type_list",
-                "CallingType": "string",
+            },
+            {
+                "Name": "addToList",
+                "CallingType": "json",
                 "Exposure":"public"
-              }
-
-
+            },
+            {
+                "Name": "getFromList",
+                "CallingType": "json",
+                "Exposure":"public"
+            }
             ]
         },
         {
@@ -138,9 +141,9 @@
                 },
 
                 {
-			              "Name": "FavouritePost_links",
-			              "DataFormat": "links"
-		            },
+                    "Name": "FavouritePost_links",
+                    "DataFormat": "links"
+                },
                 {
                     "Name": "directory_links",
                     "DataFormat": "links"
@@ -152,12 +155,6 @@
                 {
                     "Name": "unfollow",
                     "DataFormat": "links"
-                },
-                {
-                    "Name": "anchor",
-                    "DataFormat": "json",
-                    "Sharing": "public",
-                    "SchemaFile": "anchor.json"
                 }
             ],
             "Functions": [
