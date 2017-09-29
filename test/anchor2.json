@@ -94,7 +94,7 @@
         "Zome": "anchor",
         "FnName": "getFromList",
         "Input": { "anchor": "test_list" },
-        "Output": "[{\"value\":\"test_value\"}]",
+        "Output": "[\"test_value\"]",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -110,11 +110,31 @@
         "Regexp": ""
     },
     {
-        "Convey": "get list",
+        "Convey": "Check getFromList with no value to make sure both items come back",
         "Zome": "anchor",
         "FnName": "getFromList",
         "Input": { "anchor": "test_list" },
-        "Output": "[{\"value\":\"another_test_value\"},{\"value\":\"test_value\"}]",
+        "Output": "[\"another_test_value\",\"test_value\"]",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Check removeFromList",
+        "Zome": "anchor",
+        "FnName": "removeFromList",
+        "Input": { "anchor": "test_list", "value": "test_value" },
+        "Output": "1",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Check getFromList with no value to make sure only one item comes back",
+        "Zome": "anchor",
+        "FnName": "getFromList",
+        "Input": { "anchor": "test_list" },
+        "Output": "[\"another_test_value\"]",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""

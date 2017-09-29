@@ -110,7 +110,7 @@ function getFollow(params) {
     var result = {};
 
     if ((type == "follows") || (type == "following")) {
-        result["result"] = doGetLink(base,type);
+        result["result"] = dogetLinks(base,type);
     }
     else {
         result["error"] = "bad type: "+type;
@@ -123,7 +123,7 @@ function newHandle(handle)
 {
     var me = getMe();
     var directory = getDirectory();
-    var handles = doGetLink(me,"handle");
+    var handles = dogetLinks(me,"handle");
     var n = handles.length - 1;
 
     if (n >= 0) {
@@ -219,7 +219,7 @@ function isErr(result) {
 function doGetLinkLoad(base, tag)
 {
     // get the tag from the base in the DHT
-    var links = getLink(base, tag,{Load:true});
+    var links = getLinks(base, tag,{Load:true});
     
     if (isErr(links)) {
         links = [];
@@ -239,10 +239,10 @@ function doGetLinkLoad(base, tag)
 }
 
 // helper function to call getLinks, handle the no links entry error, and build a simpler links array.
-function doGetLink(base,tag)
+function dogetLinks(base,tag)
 {
     // get the tag from the base in the DHT
-    var links = getLink(base, tag,{Load:true});
+    var links = getLinks(base, tag,{Load:true});
 
     if (isErr(links)) {
         links = [];

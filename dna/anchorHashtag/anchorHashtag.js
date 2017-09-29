@@ -113,7 +113,7 @@ function isErr(result) {
 
 function doGetLinkLoad(base, tag) {
     // get the tag from the base in the DHT
-    var links = getLink(base, tag,{Load:true});
+    var links = getLinks(base, tag,{Load:true});
     if (isErr(links)) {
         links = [];
     } else {
@@ -130,9 +130,9 @@ function doGetLinkLoad(base, tag) {
 }
 
 // helper function to call getLinks, handle the no links entry error, and build a simpler links array.
-function doGetLink(base,tag) {
+function dogetLinks(base,tag) {
     // get the tag from the base in the DHT
-    var links = getLink(base, tag,{Load:true});
+    var links = getLinks(base, tag,{Load:true});
     if (isErr(links)) {
         links = [];
     }

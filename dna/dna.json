@@ -104,6 +104,11 @@
                 "Name": "getFromList",
                 "CallingType": "json",
                 "Exposure":"public"
+            },
+            {
+                "Name": "removeFromList",
+                "CallingType": "json",
+                "Exposure":"public"
             }
             ]
         },

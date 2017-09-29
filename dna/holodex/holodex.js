@@ -46,7 +46,7 @@ function bridgeGenesis() {
 
 function selectIndexNode() {
 
-  var VolunteerNodeH = getLink(App.Key.Hash, "VolunteerNode", { Load: true });
+  var VolunteerNodeH = getLinks(App.Key.Hash, "VolunteerNode", { Load: true });
 
   if (VolunteerNodeH.Links[0].E == "true")
     var key = App.Key.Hash;
