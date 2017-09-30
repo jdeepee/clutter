@@ -2,31 +2,23 @@
 // EXPOSED Functions: visible to the UI, can be called via localhost, web browser, or socket
 // ===============================================================================
 
+var AppID = App.Key.Hash;
+var Me = App.Agent.String;
+
 // Retrieves a property of the holochain from the DNA (e.g., Name, Language)
 function getProperty(name)
 {
     return property(name);
 }
 
-function appProperty(name)
-{
-    if (name == "App_Agent_Hash")    { return App.Agent.Hash; }
-    if (name == "App_Agent_String")  { return App.Agent.String; }
-    if (name == "App_Key_Hash")      { return App.Key.Hash; }
-    if (name == "App_DNA_Hash")      { return App.DNA.Hash; }
-
-    throw "Error: No App Property with name: " + name;
-}
-
 // Expects a userAddress hash of the person you want to follow
 function follow(userAddress)
 {
-    var me = getMe();                  // Looks up my hash address and assign it to 'me'
 
     return commit("follow", // Commit a new follow entry to my source chain
         { Links:[
-            { Base:userAddress, Link:me, Tag:"follower" }, // On the DHT, puts a link on their hash to my hash as a "follower"
-            { Base:me, Link:userAddress, Tag:"following" } // On the DHT, puts a link on my hash to their hash as a "following"
+            { Base:userAddress, Link:AppID, Tag:"follower" }, // On the DHT, puts a link on their hash to my hash as a "follower"
+            { Base:AppID, Link:userAddress, Tag:"following" } // On the DHT, puts a link on my hash to their hash as a "following"
         ]});
 }
 
@@ -186,9 +178,6 @@ function getHashtag(handle) {
 // ==============================================================================
 
 
-// helper function to resolve which has will be used as "me"
-function getMe() {return App.Key.Hash;}
-
 // helper function to resolve which hash will be used as the base for the directory
 // currently we just use the DNA hash as our entry for linking the directory to
 // TODO commit an anchor entry explicitly for this purpose.
@@ -198,13 +187,13 @@ function getDirectory() {return App.DNA.Hash;}
 // helper function to actually commit a handle and its links on the directory
 // this function gets called at genesis time only because all other times handle gets
 // updated using newHandle
+
 function addHandle(handle) {
     // TODO confirm no collision
     var key = commit("handle",handle);        // On my source chain, commits a new handle entry
-    var me = getMe();
     var directory = getDirectory();
 
-    commit("handle_links", {Links:[{Base:me,Link:key,Tag:"handle"}]});
+    commit("handle_links", {Links:[{Base:AppID,Link:key,Tag:"handle"}]});
     commit("directory_links", {Links:[{Base:directory,Link:key,Tag:"handle"}]});
 
     return key;

@@ -58,10 +58,10 @@
         ]
       },
       {
-          "Name": "anchor",
+          "Name": "anchors",
           "Description": "Anchor zome",
           "RibosomeType": "js",
-          "CodeFile": "anchor.js",
+          "CodeFile": "anchors.js",
           "Entries": [
             {
                 "Name": "anchor_base",

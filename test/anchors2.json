@@ -1,7 +1,7 @@
 [
     {
         "Convey": "Check getFromList with no parameters 1",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { },
         "Output": "{\"message\":\"Must pass either anchor or anchorHash!\",\"name\":\"AnchorsError\"}",
@@ -11,7 +11,7 @@
     },
     {
         "Convey": "Check getFromList with no parameters 2",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "Raw": true,
         "Input": "JSON.stringify(getFromList());",
         "Output": "{\"message\":\"Must pass either anchor or anchorHash!\",\"name\":\"AnchorsError\"}",
@@ -21,7 +21,7 @@
     },
     {
         "Convey": "Check addToList with no parameters 1",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "addToList",
         "Input": { },
         "Output": "{\"message\":\"anchor is a required parameter!\",\"name\":\"AnchorsError\"}",
@@ -31,7 +31,7 @@
     },
     {
         "Convey": "Check addToList with no parameters 2",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "addToList",
         "Input": { },
         "Output": "{\"message\":\"anchor is a required parameter!\",\"name\":\"AnchorsError\"}",
@@ -41,7 +41,7 @@
     },
     {
         "Convey": "Check addToList with no anchor parameter",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "Raw": true,
         "Input": "JSON.stringify(addToList({ value: 'test_value' }));",
         "Output": "{\"message\":\"anchor is a required parameter!\",\"name\":\"AnchorsError\"}",
@@ -51,7 +51,7 @@
     },
     {
         "Convey": "Check addToList with no value parameter",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "Raw": true,
         "Input": "JSON.stringify(addToList({ anchor: 'test_anchor' }));",
         "Output": "{\"message\":\"value is a required parameter!\",\"name\":\"AnchorsError\"}",
@@ -61,7 +61,7 @@
     },
     {
         "Convey": "Check getFromList with non-existent key",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { "anchor": "non_existent_key" },
         "Output": "null",
@@ -71,7 +71,7 @@
     },
     {
         "Convey": "Check getFromList with non-existent key",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { "anchor": "non_existent_key" },
         "Output": "null",
@@ -81,7 +81,7 @@
     },
     {
         "Convey": "Add value to list",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "value": "test_value" },
         "Output": "\"%h2%\"",
@@ -91,7 +91,7 @@
     },
     {
         "Convey": "get list",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { "anchor": "test_list" },
         "Output": "[\"test_value\"]",
@@ -101,7 +101,7 @@
     },
     {
         "Convey": "Add another value to list",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "value": "another_test_value" },
         "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
@@ -111,7 +111,7 @@
     },
     {
         "Convey": "Check getFromList with no value to make sure both items come back",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { "anchor": "test_list" },
         "Output": "[\"another_test_value\",\"test_value\"]",
@@ -121,7 +121,7 @@
     },
     {
         "Convey": "Check removeFromList",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "removeFromList",
         "Input": { "anchor": "test_list", "value": "test_value" },
         "Output": "1",
@@ -131,7 +131,7 @@
     },
     {
         "Convey": "Check getFromList with no value to make sure only one item comes back",
-        "Zome": "anchor",
+        "Zome": "anchors",
         "FnName": "getFromList",
         "Input": { "anchor": "test_list" },
         "Output": "[\"another_test_value\"]",
