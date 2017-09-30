@@ -79,7 +79,13 @@ function set(parms) {
         commit("anchor_link", { Links: [{ Base: anchor_hash, Link: links[0].Hash, Tag: _anchor_generic_, LinkAction: HC.LinkAction.Del }] });
 
         if (!preserveOldValueEntry)
-            remove(links[0].Hash);
+            try {
+                remove(links[0].Hash);
+            }
+            catch(err)
+            {
+                throw "GOT IT!";
+            }
 
     }
 
@@ -358,7 +364,7 @@ function removeLink(bashHash, hash, tag, preserveOldValueEntry) {
     var rtn = commit("anchor_link", { Links: [{ Base: bashHash, Link: hash, Tag: tag, LinkAction: HC.LinkAction.Del }] });
 
     if (!preserveOldValueEntry)
-        remove(hash);
+        remove(hash, "anchors:removeFromList");
 
     return rtn;
 }
@@ -402,3 +408,30 @@ function validatePutPkg(entry_type) { return null }
 function validateModPkg(entry_type) { return null }
 function validateDelPkg(entry_type) { return null }
 function validateLinkPkg(entry_type) { return null }
+
+var _core_remove = remove;
+remove = function(entry, message)
+{
+    var rtn = _core_remove(entry, message);
+    if (isErr(rtn))
+    {
+        var errsrc = new getErrorSource();
+        throw "HOLOCHAIN ERROR! \"" + rtn.message + "\" in " + errsrc.functionName + " at line " + errsrc.line + ", column " + errsrc.column;
+    }
+    return rtn;
+}
+
+function getErrorSource() {
+    try {
+        //Throw an error to generate a stack trace
+        throw new Error();
+    }
+    catch(e) {
+        // get the 4th line of the stack trace
+        var line = e.stack.split('\n')[3];
+        var reg = /at (.*) \(.*:(.*):(.*)\)/g.exec(line);
+        this.functionName = reg[1];
+        this.line = reg[2];
+        this.column = reg[3];
+    }
+}
