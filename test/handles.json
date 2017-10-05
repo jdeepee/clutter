@@ -1,30 +1,30 @@
 [
     {
-        "Convey":"We can create a new handle",
+        "Convey":"We can set our handle",
         "Zome": "clutter",
-        "FnName": "newHandle",
+        "FnName": "setHandle",
         "Input": "buffaloBill",
-        "Output": "%h2%",
+        "Output": "QmWW5zXtV8jjW9BaFNf7RiPQfKTwVyi4y6wJyYD9vVug3w",
         "Exposure":"public",
         "Err": "",
         "Regexp": ""
     },
     {
-        "Convey":"We can retrieve the new handle",
+        "Convey":"We can retrieve our handle",
         "Zome": "clutter",
-        "FnName": "getHandle",
-        "Input": "%key%",
+        "FnName": "getMyHandle",
+        "Input": {},
         "Output": "buffaloBill",
         "Exposure":"public",
         "Err": "",
         "Regexp": ""
     },
     {
-        "Convey":"getAgent request on non existent handle returns empty string",
+        "Convey":"getAgent request on non existent handle returns null",
         "Zome": "clutter",
         "FnName": "getAgent",
         "Input": "fooHandle",
-        "Output": "",
+        "Output": "null",
         "Exposure":"public",
         "Err": "",
         "Regexp": ""
@@ -34,7 +34,17 @@
         "Zome": "clutter",
         "FnName": "getAgent",
         "Input": "buffaloBill",
-        "Output": "%key%",
+        "Output": "%agent%",
+        "Exposure":"public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey":"We can retrieve all handles in the directory",
+        "Zome": "clutter",
+        "FnName": "getHandles",
+        "Input": {},
+        "Output": "[{\"handle\":\"buffaloBill\",\"hash\":\"%agent%\"}]",
         "Exposure":"public",
         "Err": "",
         "Regexp": ""

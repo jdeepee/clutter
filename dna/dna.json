@@ -15,101 +15,105 @@
         "H": null
     },
     "Zomes": [
-      {
-        "Name": "holodex",
-        "Description": "Zome dealing with functions relating to node to node communication and selection for index nodes",
-        "RibosomeType": "js",
-        "CodeFile": "holodex.js",
-        "BridgeTo":"holodex",
-        "Entries": [
-          {
-              "Name": "VolunteerNode",
-              "DataFormat": "string",
-              "Sharing": "public"
-          },
-          {
-              "Name": "volunteer_link",
-              "DataFormat": "links",
-              "Sharing": "public"
-          }
-        ],
-        "Functions": [
-          {
-            "Name": "selectIndexNode",
-            "CallingType": "string",
-            "Exposure": "public"
-          },
-          {
-            "Name": "indexObject",
-            "CallingType": "json",
-            "Exposure": "public"
-          },
-          {
-            "Name": "indexObjectForTest",
-            "CallingType": "json",
-            "Exposure": "public"
-          },
-          {
-            "Name": "searchContent",
-            "CallingType": "string",
-            "Exposure": "public"
-          }
-
-        ]
-      },
-      {
-          "Name": "anchors",
-          "Description": "Anchor zome",
-          "RibosomeType": "js",
-          "CodeFile": "anchors.js",
-          "Entries": [
-            {
-                "Name": "anchor_base",
-                "DataFormat": "string",
-                "Sharing": "public"
-            },
-            {
-                "Name": "anchor_link",
-                "DataFormat": "links",
-                "Sharing": "public"
-            },
-            {
-                "Name": "_anchor_generic_",
-                "DataFormat": "string",
-                "Sharing": "public"
-            },
-            {
-                "Name": "_anchor_json_type_for_testing_",
-                "DataFormat": "json",
-                "Sharing": "public"
-            }
-          ],
-          "Functions": [
-            {
-                "Name": "set",
-                "CallingType": "json",
-                "Exposure":"public"
-            },
-            {
-                "Name": "get",
-                "CallingType": "json",
-                "Exposure":"public"
-            },
-            {
-                "Name": "addToList",
-                "CallingType": "json",
-                "Exposure":"public"
-            },
-            {
-                "Name": "getFromList",
-                "CallingType": "json",
-                "Exposure":"public"
-            },
-            {
-                "Name": "removeFromList",
-                "CallingType": "json",
-                "Exposure":"public"
-            }
+        {
+            "Name": "holodex",
+            "Description": "Zome dealing with functions relating to node to node communication and selection for index nodes",
+            "RibosomeType": "js",
+            "CodeFile": "holodex.js",
+            "BridgeTo": "holodex",
+            "Entries": [
+                {
+                    "Name": "VolunteerNode",
+                    "DataFormat": "string",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "volunteer_link",
+                    "DataFormat": "links",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "selectIndexNode",
+                    "CallingType": "string",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "indexObject",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "indexObjectForTest",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "searchContent",
+                    "CallingType": "string",
+                    "Exposure": "public"
+                }
+            ]
+        },
+        {
+            "Name": "anchors",
+            "Description": "Anchor zome",
+            "RibosomeType": "js",
+            "CodeFile": "anchors.js",
+            "Entries": [
+                {
+                    "Name": "anchor_base",
+                    "DataFormat": "string",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "anchor_link",
+                    "DataFormat": "links",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "_anchor_generic_",
+                    "DataFormat": "string",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "_anchor_json_type_for_testing_",
+                    "DataFormat": "json",
+                    "Sharing": "public"
+                }
+            ],
+            "Functions": [
+                {
+                    "Name": "set",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "get",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "addToList",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getFromList",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "removeFromList",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "makeAnchorHash",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                }
             ]
         },
         {
@@ -123,7 +127,6 @@
                     "DataFormat": "string",
                     "Sharing": "public"
                 },
-
                 {
                     "Name": "post",
                     "DataFormat": "json",
@@ -131,146 +134,94 @@
                     "SchemaFile": "post.json"
                 },
                 {
-                    "Name": "Favpost",
+                    "Name": "favoritePost",
                     "DataFormat": "json",
                     "Sharing": "public",
                     "SchemaFile": "post.json"
                 },
-                {
-                    "Name": "post_links",
-                    "DataFormat": "links"
-                },
-                {
-                    "Name": "handle_links",
-                    "DataFormat": "links"
-                },
-
-                {
-                    "Name": "FavouritePost_links",
-                    "DataFormat": "links"
-                },
-                {
-                    "Name": "directory_links",
-                    "DataFormat": "links"
-                },
-                {
-                    "Name": "follow",
-                    "DataFormat": "links"
-                },
-                {
-                    "Name": "unfollow",
-                    "DataFormat": "links"
-                }
             ],
             "Functions": [
                 {
                     "Name": "getProperty",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "appProperty",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "follow",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "addPost",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "unfollow",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "post",
                     "CallingType": "json",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
-                 {
+                {
                     "Name": "postMod",
                     "CallingType": "json",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
                     "Name": "getPostsBy",
                     "CallingType": "json",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
-                    "Name": "newHandle",
+                    "Name": "setHandle",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getHandles",
+                    "CallingType": "json",
+                    "Exposure": "public"
                 },
                 {
                     "Name": "getHandle",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getMyHandle",
+                    "CallingType": "string",
+                    "Exposure": "public"
                 },
                 {
                     "Name": "getAgent",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
                 {
-                    "Name": "getFollow",
+                    "Name": "getFollowers",
                     "CallingType": "json",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 },
-
-
+                {
+                    "Name": "getFollowing",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
                 {
                     "Name": "searchPost",
                     "CallingType": "string",
-                    "Exposure":"public"
+                    "Exposure": "public"
                 }
             ]
-        },
-        {
-          "Name" : "anchorHashtag",
-          "Description" : "zome that implements the hashtag anchor",
-          "RibosomeType" : "js",
-          "CodeFile" : "anchorHashtag.js",
-          "Entries" : [
-            {
-                "Name": "hashtag",
-                "DataFormat": "string",
-                "Sharing": "public"
-            },
-            {
-                "Name": "hashtag_links",
-                "DataFormat": "links"
-            },
-            {
-                "Name": "hashtagPost_links",
-                "DataFormat": "links"
-            }
-
-          ],
-          "Functions" : [
-            {
-                "Name": "detectHashtags",
-                "CallingType": "string",
-                "Exposure":"public"
-            },
-            {
-                "Name": "createHashTag",
-                "CallingType": "json",
-                "Exposure":"public"
-            },
-            {
-                "Name": "LinkorCreateHT",
-                "CallingType": "json",
-                "Exposure":"public"
-            }
-          ]
-         }
-
+        }
     ]
 }

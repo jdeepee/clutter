@@ -6,10 +6,19 @@
 
     For details, see: https://github.com/Holochain/mixins/wiki/Anchors
 
-    NOtes to add to docs:
+    Notes to add to docs:
 
         - Can't use one call to removeFromList to remove multiple entries of same value but having different entry types
 */
+
+// ********************************************************************************************************
+// Holochain API
+// since the virtual javascript environment (Auto) doesn't allow errors to be thrown, errors are returned
+// as an object with a property of name set to "HolochainError". Therefore, we override all core Holochain 
+// functions and if there was an error object returned, we throw it instead
+// ********************************************************************************************************
+var _core_remove=remove;remove=function(a,b){return checkForError("remove",_core_remove(a,b))};var _core_makeHash=makeHash;makeHash=function(a,b){return checkForError("makeHash",_core_makeHash(a,b))};var _core_debug=debug;debug=function(a){return checkForError("debug",_core_debug(a))};var _core_call=call;call=function(a,b,c){return checkForError("call",_core_call(a,b,c))};var _core_commit=commit;commit=function(a,b){return checkForError("commit",_core_commit(a,b))};var _core_get=get;get=function(a,b){return checkForError("get",b===undefined?_core_get(a):_core_get(a,b))};var _core_getLinks=getLinks;getLinks=function(a,b,c){return checkForError("getLinks",_core_getLinks(a,b,c))};function checkForError(func,rtn){if(typeof rtn==="object"&&rtn.name=="HolochainError"){var errsrc=new getErrorSource(4);var message='HOLOCHAIN ERROR! "'+rtn.message+'" on '+func+(errsrc.line===undefined?"":" in "+errsrc.functionName+" at line "+errsrc.line+", column "+errsrc.column);throw{name:"HolochainError",function:func,message:message,holochainMessage:rtn.message,source:errsrc,toString:function(){return this.message}}}return rtn}function getErrorSource(depth){try{throw new Error}catch(e){var line=e.stack.split("\n")[depth];var reg=/at (.*) \(.*:(.*):(.*)\)/g.exec(line);if(reg){this.functionName=reg[1];this.line=reg[2];this.column=reg[3]}}}
+// ********************************************************************************************************
 
 var _anchor_generic_ = "_anchor_generic_";
 
@@ -38,30 +47,28 @@ function set(parms) {
     //         return new errorObject("If entryType is not specified, value must be a string");
 
     var anchor_hash = makeHash("anchor_base", anchor);
+    var newAnchor = false;
 
     // Lookup the base entry
-    var links = getLinks(anchor_hash, _anchor_generic_, { Load: true });
+    try { var links = getLinks(anchor_hash, _anchor_generic_, { Load: true }); }
 
-    if (isErr(links)) // getLink got an error
+    catch (err) // getLink got an error
     {
-        if (links.message == "hash not found") // hash not found, create the base entry, and continue with empty links list
+        if (err.holochainMessage == "hash not found") // hash not found, create the base entry, and continue with empty links list
         {
             var anchor_hash = commit("anchor_base", anchor);
-
-            if (isErr(anchor_hash)) // failed
-                return anchor_hash;
-
-            links = { Links: [] };
+            links = [];
+            newAnchor = true;
         }
-        else if (links.message == "No links for " + _anchor_generic_)
+        else if (err.holochainMessage == "No links for " + _anchor_generic_)
             return new errorObject("\"" + anchor + "\" is not a simple anchor link base!");
         else
-            return links; // other error, return it
+            throw err; // other error, throw it
 
     }
-    else if (links.length != 1) // an existing Key/Value base entry will only always have just 1 link entry, no more, no less
-        return new errorObject("\"" + anchor + "\" is not a simple anchor link base!");
 
+    if (links.length != 1 && !newAnchor) // an existing Key/Value base entry will only always have just 1 link entry, no more, no less
+        return new errorObject("\"" + anchor + "\" is not a simple anchor link base!");
 
     // if this is a generic entryType, always stringify it
     if (parms.entryType === undefined)
@@ -70,22 +77,13 @@ function set(parms) {
     // put the value on the chain
     var value_hash = commit(entryType, value);
 
-    if (isErr(value_hash)) // failed
-        return value_hash;
-
     // if this is not a new key, delete the old value and link
     if (links.length == 1) {
 
         commit("anchor_link", { Links: [{ Base: anchor_hash, Link: links[0].Hash, Tag: _anchor_generic_, LinkAction: HC.LinkAction.Del }] });
 
         if (!preserveOldValueEntry)
-            try {
-                remove(links[0].Hash);
-            }
-            catch(err)
-            {
-                throw "GOT IT!";
-            }
+            remove(links[0].Hash, "anchors-set");
 
     }
 
@@ -114,16 +112,15 @@ var get = function get(parms) {
         return new errorObject("Can't pass both anchor and anchorHash!");
 
     // The value is stored by link reference with the anchor name as the base. Get it!
-    var links = getLinks(anchorHash, _anchor_generic_, { Load: true });
+    try { var links = getLinks(anchorHash, _anchor_generic_, { Load: true }); }
 
-    if (isErr(links)) // failed
-    {
-        if (links.message == "hash not found")
+    catch (err) {
+        if (err.holochainMessage == "hash not found")
             return null;
-        else if (links.message == "No links for " + _anchor_generic_)
+        else if (err.holochainMessage == "No links for " + _anchor_generic_)
             return new errorObject("\"" + anchor + "\" is not a simple anchor link base!");
 
-        return links;
+        throw err;
     }
 
     if (links.length == 0) return new errorObject("\"" + anchor + "\" is not a simple anchor link base because it has 0 links!");
@@ -156,23 +153,26 @@ function addToList(parms) {
     var anchor_hash = makeHash("anchor_base", anchor);
 
     // Lookup the base entry
-    var links = getLinks(anchor_hash, index, { Load: false });
+    try { var links = getLinks(anchor_hash, index, { Load: false }); }
 
-    if (isErr(links)) // getLink got an error
+    catch (err) // getLink got an error
     {
-        if (links.message == "hash not found") // hash not found, create the base entry, and continue with empty links list
+        if (err.holochainMessage == "hash not found") // hash not found, create the base entry, and continue with empty links list
         {
             var anchor_hash = commit("anchor_base", anchor);
 
             if (isErr(anchor_hash)) // failed
                 return anchor_hash;
 
-            links = { Links: [] };
+            links = [];
         }
-        else if (links.message == "No links for " + (index === undefined ? "" : index)) // an index was specified and it doesn't exist
+        else if (err.holochainMessage == "No links for " + (index === undefined ? "" : index)) // an index was specified and it doesn't exist
+        {
             var x = "x"; // do nothing because that is just fine!
+            links = [];
+        }
         else {
-            return links; // other error, return it
+            throw err; // other error, return it
         }
 
     }
@@ -192,7 +192,7 @@ function addToList(parms) {
         commit("anchor_link", { Links: [{ Base: anchor_hash, Link: links[0].Hash, Tag: index, LinkAction: HC.LinkAction.Del }] });
 
         if (!preserveOldValueEntry)
-            remove(links[0].Hash);
+            remove(links[0].Hash, "anchors:addToList");
     }
 
     // add the new value's link
@@ -218,16 +218,16 @@ function getFromList(parms) {
         return new errorObject("Can't pass both anchor and anchorHash!");
 
     // The value is stored by link reference with the anchor name as the base. Get it!
-    var links = getLinks(anchorHash, index === undefined ? "" : index, { Load: true });
+    try { var links = getLinks(anchorHash, index === undefined ? "" : index, { Load: true }); }
 
-    if (isErr(links)) // failed
+    catch (err)// failed
     {
-        if (links.message == "hash not found")
+        if (err.holochainMessage == "hash not found")
             return null;
-        else if (links.message == ("No links for " + (index === undefined ? "" : index))) // an index was specified and it doesn't exist
-            var x = "x"; // do nothing because that is just fine!
+        else if (err.holochainMessage == ("No links for " + (index === undefined ? "" : index))) // an index was specified and it doesn't exist
+            return index === undefined ? [] : null;
         else
-            return links;
+            throw err;
     }
 
     var rtn;
@@ -281,10 +281,11 @@ function removeFromList(parms) {
     var valueHash = parms === undefined ? undefined : parms.valueHash;
     var entryType = parms === undefined ? undefined : parms.entryType == undefined ? _anchor_generic_ : parms.entryType;
     var index = parms === undefined ? undefined : parms.index == undefined ? undefined : JSON.stringify(parms.index);
-    var preserveOldValueEntry = parms === undefined ? undefined : parms.preserveOldValueEntry == undefined ? false : parms.entryType;
+    var preserveOldValueEntry = parms === undefined ? undefined : parms.preserveOldValueEntry == undefined ? false : parms.preserveOldValueEntry;
 
     // PARAMETER VALIDATION *******************************
 
+    // build valueHash if we didn't get one as a parameter
     if (valueHash === undefined && value !== undefined)
         if (entryType == _anchor_generic_) // if it's generic, we stringified it at store time
             valueHash = makeHash(entryType, JSON.stringify(value));
@@ -294,20 +295,20 @@ function removeFromList(parms) {
     if (anchorHash === undefined) // didn't get an anchorHash
     {
         if (anchor === undefined)
-            return new errorObject("Must pass either anchor or anchorHash!");
+            throw new errorObject("Must pass either anchor or anchorHash!");
 
         anchorHash = makeHash("anchor_base", anchor);
     }
     else if (anchor !== undefined) // got an anchor hash and an anchor
-        return new errorObject("Can't pass both anchor and anchorHash!");
+        throw new errorObject("Can't pass both anchor and anchorHash!");
 
     if (index === undefined) // didn't get an index
     {
         if (valueHash === undefined)
-            return new errorObject("Must pass either index or value or valueHash!");
+            throw new errorObject("Must pass either index or value or valueHash!");
     }
     else if (valueHash !== undefined) // got an index and a valueHash
-        return new errorObject("Can't pass both index and (value or valueHash)!");
+        throw new errorObject("Can't pass both index and (value or valueHash)!");
 
     // ******************************************************
 
@@ -346,11 +347,8 @@ function removeFromList(parms) {
 
         for (var x = 0; x < links.length; x++) {
             if (links[x].Hash == valueHash) {
-                var result = removeLink(anchorHash, links[x].Hash, links[x].Tag, preserveOldValueEntry);
-
-                if (isErr(result))
-                    return result;
-
+                // if there is more than one matching value and preserveOldEntry was set to false, set it to true after first link processed so as to avoid attempting to removeLink again
+                removeLink(anchorHash, links[x].Hash, links[x].Tag, preserveOldValueEntry || count > 0);
                 count++;
             }
         }
@@ -369,15 +367,28 @@ function removeLink(bashHash, hash, tag, preserveOldValueEntry) {
     return rtn;
 }
 
+function makeAnchorHash(parms)
+{
+    if (parms.entryType === undefined)
+        return makeHash(_anchor_generic_, JSON.stringify(parms.value));
+    else
+        return makeHash(parms.entryType, parms.value);
+}
+
 function errorObject(errorText) {
     this.name = "AnchorsError";
     this.message = errorText;
+
+    function toString() {
+        return this.message;
+    }
 }
 
 // helper function to determine if value returned from holochain function is an error
 function isErr(result) {
     return ((typeof result === 'object') && result.name == "HolochainError");
 }
+
 
 /*************
 VALIDATION METHODS
@@ -403,35 +414,10 @@ function validateLink(linkingEntryType, baseHash, linkHash, tag, pkg, sources) {
 }
 
 function validateMod(entry_type, hash, newHash, pkg, sources) { return false; }
-function validateDel(entry_type, hash, pkg, sources) { return false; }
+function validateDel(entry_type, hash, pkg, sources) { return true; }
 function validatePutPkg(entry_type) { return null }
 function validateModPkg(entry_type) { return null }
 function validateDelPkg(entry_type) { return null }
 function validateLinkPkg(entry_type) { return null }
 
-var _core_remove = remove;
-remove = function(entry, message)
-{
-    var rtn = _core_remove(entry, message);
-    if (isErr(rtn))
-    {
-        var errsrc = new getErrorSource();
-        throw "HOLOCHAIN ERROR! \"" + rtn.message + "\" in " + errsrc.functionName + " at line " + errsrc.line + ", column " + errsrc.column;
-    }
-    return rtn;
-}
 
-function getErrorSource() {
-    try {
-        //Throw an error to generate a stack trace
-        throw new Error();
-    }
-    catch(e) {
-        // get the 4th line of the stack trace
-        var line = e.stack.split('\n')[3];
-        var reg = /at (.*) \(.*:(.*):(.*)\)/g.exec(line);
-        this.functionName = reg[1];
-        this.line = reg[2];
-        this.column = reg[3];
-    }
-}

@@ -19,32 +19,6 @@ function getMyHandle(callbackFn) {
     });
 }
 
-function getFollow(who,type,callbackFn) {
-
-    send("getFollow",JSON.stringify({from:who,type:type}),function(data) {
-        
-        var j =  JSON.parse(data);
-        var following = j.result;
-        
-        if (following != undefined)
-        {
-            
-            var len = following.length;
-            
-            for (var i = 0; i < len; i++) {
-                cacheFollow(following[i]);
-            }
-
-            if (callbackFn!=undefined) {
-                callbackFn();
-            }
-
-        }
-
-    });
-
-}
-
 function getProfile() {
     send("appProperty","App_Key_Hash", function(me) {
         App.me = me;

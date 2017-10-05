@@ -50,6 +50,11 @@
             "Name": "removeFromList",
             "CallingType": "json",
             "Exposure":"public"
+        },
+        {
+            "Name": "makeAnchorHash",
+            "CallingType": "json",
+            "Exposure":"public"
         }
     ]
 }
