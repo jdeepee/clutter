@@ -74,6 +74,11 @@
                 },
                 {
                     "Name": "_anchor_generic_",
+                    "DataFormat": "json",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "_anchor_string_type_for_testing_",
                     "DataFormat": "string",
                     "Sharing": "public"
                 },
@@ -110,7 +115,22 @@
                     "Exposure": "public"
                 },
                 {
-                    "Name": "makeAnchorHash",
+                    "Name": "makeAnchorValueHash",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "getAnchorValue",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "testLinksList",
+                    "CallingType": "json",
+                    "Exposure": "public"
+                },
+                {
+                    "Name": "testAnchors",
                     "CallingType": "json",
                     "Exposure": "public"
                 }
@@ -139,6 +159,16 @@
                     "Sharing": "public",
                     "SchemaFile": "post.json"
                 },
+                {
+                    "Name": "hashtag_index_base",
+                    "DataFormat": "string",
+                    "Sharing": "public"
+                },
+                {
+                    "Name": "hashtag_index_entry",
+                    "DataFormat": "links",
+                    "Sharing": "public"
+                }
             ],
             "Functions": [
                 {

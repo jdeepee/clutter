@@ -1,5 +1,5 @@
-/* Holochain API */ var _core_remove = remove; remove = function (a, b) { return checkForError("remove", _core_remove(a, b)) }; var _core_makeHash = makeHash; makeHash = function (a, b) { return checkForError("makeHash", _core_makeHash(a, b)) }; var _core_debug = debug; debug = function (a) { return checkForError("debug", _core_debug(a)) }; var _core_call = call; call = function (a, b, c) { return checkForError("call", _core_call(a, b, c)) }; var _core_commit = commit; commit = function (a, b) { return checkForError("commit", _core_commit(a, b)) }; var _core_get = get; get = function (a, b) { return checkForError("get", b === undefined ? _core_get(a) : _core_get(a, b)) }; var _core_getLinks = getLinks; getLinks = function (a, b, c) { return checkForError("getLinks", _core_getLinks(a, b, c)) }; var _core_send = send; send = function (a, b, c) { return checkForError("send", c === undefined ? _core_send(a, b) : _core_send(a, b, c)) }; function checkForError(func, rtn) { if (typeof rtn === "object" && rtn.name == "HolochainError") { var errsrc = new getErrorSource(4); var message = 'HOLOCHAIN ERROR! "' + rtn.message.toString() + '" on ' + func + (errsrc.line === undefined ? "" : " in " + errsrc.functionName + " at line " + errsrc.line + ", column " + errsrc.column); throw { name: "HolochainError", function: func, message: message, holochainMessage: rtn.message, source: errsrc, toString: function () { return this.message } } } return rtn } function getErrorSource(depth) { try { throw new Error } catch (e) { var line = e.stack.split("\n")[depth]; var reg = /at (.*) \(.*:(.*):(.*)\)/g.exec(line); if (reg) { this.functionName = reg[1]; this.line = reg[2]; this.column = reg[3] } } }
-/* Anchors API */ function postCallProcess(rtn) { return JSON.parse(rtn) } function setAnchor(anchor, value, entryType, preserveOldValueEntry) { var parms = { anchor: anchor, value: value }; if (entryType !== undefined) parms.entryType = entryType; if (preserveOldValueEntry !== undefined) parms.preserveOldValueEntry = preserveOldValueEntry; return postCallProcess(call("anchors", "set", parms)) } function getAnchor(anchor, anchorHash) { var parms = { anchor: anchor }; if (anchorHash !== undefined) parms.anchorHash = anchorHash; return postCallProcess(call("anchors", "get", parms)) } function addToListAnchor(anchor, value, entryType, index, preserveOldValueEntry) { var parms = { anchor: anchor, value: value }; if (entryType !== undefined) parms.entryType = entryType; if (index !== undefined) parms.index = index; if (preserveOldValueEntry !== undefined) parms.preserveOldValueEntry = preserveOldValueEntry; return postCallProcess(call("anchors", "addToList", parms)) } function getFromListAnchor(anchor, index, anchorHash) { var parms = { anchor: anchor }; if (index !== undefined) parms.index = index; if (anchorHash !== undefined) parms.anchorHash = anchorHash; return postCallProcess(call("anchors", "getFromList", parms)) } function removeFromListAnchor(anchor, value, entryType, index, preserveOldValueEntry, anchorHash, valueHash) { var parms = { anchor: anchor }; if (value !== undefined) parms.value = value; if (entryType !== undefined) parms.entryType = entryType; if (index !== undefined) parms.index = index; if (preserveOldValueEntry !== undefined) parms.preserveOldValueEntry = preserveOldValueEntry; if (anchorHash !== undefined) parms.anchorHash = anchorHash; if (valueHash !== undefined) parms.valueHash = valueHash; return postCallProcess(call("anchors", "removeFromList", parms)) } function makeAnchorHash(value, entryType) { var parms = { value: value }; if (entryType !== undefined) parms.entryType = entryType; return postCallProcess(call("anchors", "makeAnchorHash", parms)) }
+/* Holochain API */ var _core_remove=remove;remove=function(a,b){return checkForError("remove",_core_remove(a,b))};var _core_makeHash=makeHash;makeHash=function(a,b){return checkForError("makeHash",_core_makeHash(a,b))};var _core_debug=debug;debug=function(a){return checkForError("debug",_core_debug(JSON.stringify(a)))};var _core_call=call;call=function(a,b,c){return __holochain_api_check_for_json(checkForError("call",_core_call(a,b,c)))};var _core_commit=commit;commit=function(a,b){return checkForError("commit",_core_commit(a,b))};var _core_get=get;get=function(a,b){return __holochain_api_check_for_json(checkForError("get",b===undefined?_core_get(a):_core_get(a,b)))};var _core_getLinks=getLinks;getLinks=function(a,b,c){return checkForError("getLinks",_core_getLinks(a,b,c))};var _core_send=send;send=function(a,b,c){return __holochain_api_check_for_json(checkForError("send",c===undefined?_core_send(a,b):_core_send(a,b,c)))};function __holochain_api_check_for_json(rtn){try{rtn=JSON.parse(rtn)}catch(err){}return rtn}function checkForError(func,rtn){if(typeof rtn==="object"&&rtn.name=="HolochainError"){var errsrc=new getErrorSource(4);var message='HOLOCHAIN ERROR! "'+rtn.message.toString()+'" on '+func+(errsrc.line===undefined?"":" in "+errsrc.functionName+" at line "+errsrc.line+", column "+errsrc.column);throw{name:"HolochainError",function:func,message:message,holochainMessage:rtn.message,source:errsrc,toString:function(){return this.message}}}return rtn}function getErrorSource(depth){try{throw new Error}catch(e){var line=e.stack.split("\n")[depth];var reg=/at (.*) \(.*:(.*):(.*)\)/g.exec(line);if(reg){this.functionName=reg[1];this.line=reg[2];this.column=reg[3]}}}
+/* Anchors API */ function __anchors_api_postCallProcess(rtn){return rtn}function __anchors_api_isObject(item){return item===Object(item)}function setAnchor(anchor,value,entryType,preserveOldValueEntry,anchorHash,valueHash){if(__anchors_api_isObject(anchor))return __anchors_api_postCallProcess(call("anchors","set",anchors));var parms={anchor:anchor,value:value};if(entryType!==undefined)parms.entryType=entryType;if(preserveOldValueEntry!==undefined)parms.preserveOldValueEntry=preserveOldValueEntry;if(anchorHash!==undefined)parms.anchorHash=anchorHash;if(valueHash!==undefined)parms.valueHash=valueHash;return __anchors_api_postCallProcess(call("anchors","set",parms))}function getAnchor(anchor,anchorHash){if(__anchors_api_isObject(anchor))return __anchors_api_postCallProcess(call("anchors","get",anchors));var parms={anchor:anchor};if(anchorHash!==undefined)parms.anchorHash=anchorHash;return __anchors_api_postCallProcess(call("anchors","get",parms))}function addToListAnchor(anchor,value,entryType,preserveOldValueEntry,anchorHash,valueHash){if(__anchors_api_isObject(anchor))return __anchors_api_postCallProcess(call("anchors","addToList",anchors));var parms={anchor:anchor,value:value};if(entryType!==undefined)parms.entryType=entryType;if(preserveOldValueEntry!==undefined)parms.preserveOldValueEntry=preserveOldValueEntry;if(anchorHash!==undefined)parms.anchorHash=anchorHash;if(valueHash!==undefined)parms.valueHash=valueHash;return __anchors_api_postCallProcess(call("anchors","addToList",parms))}function getFromListAnchor(anchor,anchorHash){if(__anchors_api_isObject(anchor))return __anchors_api_postCallProcess(call("anchors","getFromList",anchors));var parms={anchor:anchor};if(anchorHash!==undefined)parms.anchorHash=anchorHash;return __anchors_api_postCallProcess(call("anchors","getFromList",parms))}function removeFromListAnchor(anchor,value,entryType,preserveOldValueEntry,anchorHash,valueHash){if(__anchors_api_isObject(anchor))return __anchors_api_postCallProcess(call("anchors","removeFromList",anchors));var parms={anchor:anchor};if(value!==undefined)parms.value=value;if(entryType!==undefined)parms.entryType=entryType;if(preserveOldValueEntry!==undefined)parms.preserveOldValueEntry=preserveOldValueEntry;if(anchorHash!==undefined)parms.anchorHash=anchorHash;if(valueHash!==undefined)parms.valueHash=valueHash;return __anchors_api_postCallProcess(call("anchors","removeFromList",parms))}function makeAnchorValueHash(value,entryType){var parms={value:value};if(entryType!==undefined)parms.entryType=entryType;return __anchors_api_postCallProcess(call("anchors","makeAnchorValueHash",parms))}
 
 var AppID = App.DNA.Hash;
 var Me = App.Agent.Hash;
@@ -29,26 +29,33 @@ function getFollowing(parms) {
 }
 
 function post(post) {
-    
-    var post_hash = commit("post", post);
+    var post_hash = addToListAnchor("posts", post, "post", Me).valueHash;
 
-    addToListAnchor("posts", post, "post");
+    // hashtags = post.message.match(/\B\#\w\w+\b/g);
 
+    // if (hashtags != null)
+    // {
+    //     var links = [];
+        
+    //     for (var x = 0; x < hashtags.length; x++)
+    //     {
+    //         var hashtag = hastags[x].substr(1);
+    //         var hashtag_hash = commit("hashtag_index_base", "hashtag:" + hashtag);
 
-    var regexp = /\B\#\w\w+\b/g;
+    //         addToListAnchor("hashtags_index", )
 
-    hashtag = String(postString).match(regexp);
-  
-    var hashTag_List = call("anchorHashtag", "detectHashtags", post.message);
-
-    if (hashTag_List != null) {
-        for (var i in hashTag_List) {
-            var ht = hashTag_List[i];
-            call("anchorHashtag", "LinkorCreateHT", ht, post_hash);
-        }
-    }
+    //         var hashtag_index_base = commit("hashtag_index_base", "hashtag:" + hashtag).valueHash;
+    //         links.push({ Base: , Link: post_hash });
+    //     }
+        
+    //     commit("hashtag_index_entry", { Links: links });
+    // }
 
     return post_hash; // Returns the hash key of the new post to the calling function
+}
+
+function getPostsBy(parms) {
+    return getFromListAnchor("posts", parms.userAddress);
 }
 
 function searchPost(searchString) {
@@ -70,25 +77,6 @@ function postMod(params) {
     return update("post", post, hash);
 }
 
-// TODO add "last 10" or "since timestamp" when query info is supported
-function getPostsBy(userAddresses) {
-    // From the DHT, gets all "post" metadata entries linked from this userAddress
-    var posts = [];
-    for (var i = 0; i < userAddresses.length; i++) {
-        var author = userAddresses[i];
-        var authorPosts = doGetLinkLoad(author, "post");
-
-        // add in the author
-        for (var j = 0; j < authorPosts.length; j++) {
-            var post = JSON.parse(authorPosts[j].post);
-            post.author = author;
-            post.hash = authorPosts[j].H;
-            posts.push(post);
-        }
-    }
-    return posts;
-}
-
 
 // set the handle of this node
 function setHandle(handle) {
@@ -106,7 +94,7 @@ function setHandle(handle) {
     // Add the new handle to the directory
     addToListAnchor("userDirectory", Me, undefined, handle);
 
-    return makeAnchorHash(handle);
+    return makeAnchorValueHash(handle);
 
 }
 

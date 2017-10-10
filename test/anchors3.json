@@ -4,7 +4,7 @@
         "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "index": 1, "value": "test_value" },
-        "Output": "\"%h2%\"",
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmP6eLJ2QbSbapDqhGJnHKUX27e3uy6MN3eSRabXahfHad\",\"valueHash\":\"QmUQCc79iPsjYtz72KZyTRiuH1LJiRiRgKRZH2UwhxqBG5\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -24,7 +24,7 @@
         "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "index": 2, "value": "another_test_value" },
-        "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"Qmf7L5nsH6vUPVdMhU5qXoQUKEXMnVyD7sgD8M6W54H2iW\",\"valueHash\":\"QmRJ77cbtmVY91JNUSTyNNcpe5nq26yWPCYqALoap93LjC\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -34,7 +34,7 @@
         "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "index": 3, "value": "and_yet_another_test_value" },
-        "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmbFwkUjJZJDpu4kGk8GqCr9RNDdu2TKGroaZ66ZUzSwRP\",\"valueHash\":\"QmXavfutxXF8epWuNKRawDN4bjEhfhtTYugG1Vq5hq7wEz\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -80,11 +80,11 @@
         "Regexp": ""
     },
     {
-        "Convey": "Add a value to list with an existing index",
+        "Convey": "Add a value to list with an existing index, with preventDuplicateIndex",
         "Zome": "anchors",
         "FnName": "addToList",
-        "Input": { "anchor": "test_list", "index": 3, "value": "and_an_updated_test_value" },
-        "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
+        "Input": { "anchor": "test_list", "index": 3, "value": "and_an_updated_test_value", "preventDuplicateIndex": true },
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmaFgi7egA7RmsSyy6Ea1msDT1fUs2461kCgmrrEen5vpx\",\"valueHash\":\"QmQEr9BMA29P8W7GsUEyt4gv9nGbYpovbSf7bNTfhSfJFQ\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -104,7 +104,7 @@
         "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "index": 3, "entryType": "_anchor_json_type_for_testing_", "value": { "a_property": "and_an_updated_test_value" } },
-        "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmezvEcY2tma6JbA2gyPnuEnBDbFGEvPHTjUAUXEGSgKaL\",\"valueHash\":\"QmfD7PeqCEVx29ZdGRHx3peNGRymTviiFN71tZyrdXWiGu\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -114,7 +114,7 @@
         "Zome": "anchors",
         "FnName": "addToList",
         "Input": { "anchor": "test_list", "index": 4, "entryType": "_anchor_json_type_for_testing_", "value": { "a_property": "and_an_updated_test_value" } },
-        "Output": "\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\"",
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmXTMrqW3jwFVfG2jnx5tDGzbC5TUSth99UEnBWfae3BBH\",\"valueHash\":\"QmfD7PeqCEVx29ZdGRHx3peNGRymTviiFN71tZyrdXWiGu\"}",
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
@@ -148,5 +148,54 @@
         "Exposure": "public",
         "Err": "",
         "Regexp": ""
-    }
-]
+    },
+    {
+        "Convey": "Add a value to list with an index",
+        "Zome": "anchors",
+        "FnName": "addToList",
+        "Input": { "anchor": "test_list", "value": "another_test_value", "index": "test_index" },
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmQTtXAGAvp4idAoKefxxAUSTPTLuC3XKPNqUrYvpceJ1A\",\"valueHash\":\"QmRJ77cbtmVY91JNUSTyNNcpe5nq26yWPCYqALoap93LjC\"}",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Add another value to list with the same index",
+        "Zome": "anchors",
+        "FnName": "addToList",
+        "Input": { "anchor": "test_list", "value": "another_test_value2", "index": "test_index" },
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmNSrprkgiEyeiDHVoBLPsgbR2gnErLQ8kDENSYYUXUQ48\",\"valueHash\":\"Qmctpi4TC4zhKFfsygXFWLR7v6nUQgYQHqyjJF7xtnZaQB\"}",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Check getFromList with no value or index to make sure three items come back",
+        "Zome": "anchors",
+        "FnName": "getFromList",
+        "Input": { "anchor": "test_list" },
+        "Output": "[{\"index\":\"test_index\",\"value\":\"another_test_value\"},{\"index\":\"_anchor_generic_\",\"value\":\"another_test_value\"},{\"index\":\"test_index\",\"value\":\"another_test_value2\"}]",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Add yet another value to list with the same index but with preventDuplicateIndex",
+        "Zome": "anchors",
+        "FnName": "addToList",
+        "Input": { "anchor": "test_list", "value": "another_test_value3", "index": "test_index", "preventDuplicateIndex": true },
+        "Output": "{\"anchorHash\":\"QmQ5j2Ew5J5NpJ9yhJnqTJmD57nK5VJK7Z8SzGwZV5RiJL\",\"linkHash\":\"QmerCQzcBzicGAJkw9feurWgmhCmKCeQHSzWA2T4kLCSHu\",\"valueHash\":\"QmPy6aHZTbYKUXb86RRXZyHgJYmxgkMPkxM6YddDiZdtak\"}",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    },
+    {
+        "Convey": "Check getFromList with no value or index to make sure two items come back",
+        "Zome": "anchors",
+        "FnName": "getFromList",
+        "Input": { "anchor": "test_list" },
+        "Output": "waiting for bug fix",
+        "Exposure": "public",
+        "Err": "",
+        "Regexp": ""
+    }]
